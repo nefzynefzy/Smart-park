@@ -1,6 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { AppComponent } from './app/app.component';
+import { provideRouter } from '@angular/router';
+import { SignInComponent } from './app/sign-in/sign-in.component';
+import { SignUpComponent } from './app/sign-up/sign-up.component';
+import { AdminDashboardComponent } from './app/admin-dashboard/admin-dashboard.component';
+import { UserDashboardComponent } from './app/user-dashboard/user-dashboard.component';
+import { appRoutes } from './app/app.routes'; // Importation des routes
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+bootstrapApplication(SignInComponent, {
+  providers: [
+    provideRouter(appRoutes) // Fournir le routage ici
+  ]
+});

@@ -1,1 +1,101 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7f6;
+  margin: 0;
+  padding: 0;
+}
+
+h2 {
+  color: #333;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Form container */
+form {
+  max-width: 500px;
+  margin: 20px auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Form labels */
+label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+/* Form inputs */
+input, select {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+}
+
+/* Focused input state */
+input:focus, select:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Button */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #800665;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Links */
+a {
+  color: #800665;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive styling */
+@media (max-width: 600px) {
+  form {
+    padding: 15px;
+  }
+}
+
+/* Additional custom styles */
+.form-group {
+  margin-bottom: 20px;
+}
+
+select, input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="number"] {
+  font-size: 1rem;
+}
+
+button {
+  font-size: 1.2rem;
+}
+
+p {
+  text-align: center;
+  font-size: 1rem;
+}
