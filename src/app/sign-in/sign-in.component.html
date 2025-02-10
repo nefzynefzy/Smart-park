@@ -7,24 +7,6 @@
   <label for="password">Mot de passe:</label>
   <input type="password" id="password" [(ngModel)]="password" name="password" required />
 
-  <label for="role">Rôle:</label>
-  <select id="role" [(ngModel)]="role" name="role" required>
-    <option value="user">Utilisateur</option>
-    <option value="admin">Admin</option>
-  </select>
-
-  <!-- Champ pour code Admin -->
-  <div *ngIf="role === 'admin'">
-    <label for="adminCode">Code Admin:</label>
-    <input type="text" id="adminCode" [(ngModel)]="adminCode" name="adminCode" required />
-  </div>
-
-  <!-- Champ pour code Utilisateur -->
-  <div *ngIf="role === 'user'">
-    <label for="userCode">Code Utilisateur:</label>
-    <input type="text" id="userCode" [(ngModel)]="userCode" name="userCode" required />
-  </div>
-
   <button type="submit">Se connecter</button>
 </form>
 

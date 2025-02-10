@@ -6,20 +6,28 @@ import { RouterModule } from '@angular/router';
   selector: 'app-sign-up',
   standalone: true,
   imports: [FormsModule, RouterModule],
-  templateUrl: './sign-up.component.html'
+  templateUrl: './sign-up.component.html',
 })
 export class SignUpComponent {
-  nom: string = '';
-  prenom: string = '';
+  firstName: string = '';
+  lastName: string = '';
   email: string = '';
+  username: string = '';
+  phone: string = '';
   password: string = '';
-  cin: string = '';
-  age: number | null = null;
-  numPhone: string = '';
-  poste: string = '';
-  role: string = '';
+  confirmPassword: string = '';
 
   signUp() {
-    console.log('Données utilisateur :', this.nom, this.prenom, this.email, this.role);
+    if (this.password !== this.confirmPassword) {
+      alert("Les mots de passe ne correspondent pas !");
+      return;
+    }
+    console.log('Inscription réussie avec :', {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      email: this.email,
+      username: this.username,
+      phone: this.phone,
+    });
   }
 }
