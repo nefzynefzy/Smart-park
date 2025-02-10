@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
+import { SignInComponent } from './auth/components/sign-in/sign-in.component';
+import { SignUpComponent } from './auth/components/sign-up/sign-up.component';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
