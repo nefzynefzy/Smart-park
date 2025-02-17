@@ -1,16 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-const BASE_URL=["http://localhost:8080"];  
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private apiUrl = 'http://localhost:8082/parking/api/auth'; // Update with your backend URL
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  register(signupRequest:any){
-    return this.http.post(BASE_URL+"/api/auth/signup",signupRequest);
+  register(user: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/signup`, user);
   }
 }
