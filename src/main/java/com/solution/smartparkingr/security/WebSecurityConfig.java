@@ -62,27 +62,29 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activation de CORS
-                .csrf(csrf -> csrf.disable()) // Désactivation de CSRF pour API REST
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Pas de session
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()  // Autoriser les endpoints d'authentification
-                        .requestMatchers("/api/public/**").permitAll() // Autoriser les routes publiques
-                        .anyRequest().authenticated()  // Toute autre requête doit être authentifiée
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/user/reservations").permitAll() // ✅ Ajout pour autoriser la route
+                        .anyRequest().authenticated()
                 )
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler)) // Gestion des erreurs d'auth
-                .authenticationProvider(authenticationProvider()) // Configuration du provider d'auth
-                .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class) // Ajout du filtre JWT
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
                         .logoutSuccessHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK))
-                ) // Gestion du logout
+                )
                 .rememberMe(rememberMe -> rememberMe
-                        .tokenValiditySeconds(86400) // 1 jour
+                        .tokenValiditySeconds(86400)
                         .key("smartParkingSecureKey")
-                ) // Optionnel : Gestion du rememberMe
+                )
                 .build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

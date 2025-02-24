@@ -1,54 +1,34 @@
 package com.solution.smartparkingr.controller;
 
+import com.solution.smartparkingr.load.response.ReservationResponse;
 import com.solution.smartparkingr.model.User;
+import com.solution.smartparkingr.model.Reservation;
 import com.solution.smartparkingr.repository.UserRepository;
 import com.solution.smartparkingr.repository.ReservationRepository;
 import com.solution.smartparkingr.security.services.UserDetailsImpl;
 import com.solution.smartparkingr.load.response.MessageResponse;
-import com.solution.smartparkingr.load.response.ReservationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/user")  // 👈 Vérifie que c'est bien défini
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
-    private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
 
-    public UserController(UserRepository userRepository, ReservationRepository reservationRepository) {
-        this.userRepository = userRepository;
+    public UserController(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
 
-    // Modifier les informations du profil utilisateur
-    @PutMapping("/update")
-    public ResponseEntity<?> updateUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                               @Valid @RequestBody User updatedUser) {
-        // Récupérer l'utilisateur connecté
-        User user = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new RuntimeException("Error: User not found"));
-
-        // Mettre à jour les informations
-        user.setFirstName(updatedUser.getFirstName());
-        user.setLastName(updatedUser.getLastName());
-        user.setPhone(updatedUser.getPhone());
-        user.setEmail(updatedUser.getEmail());
-
-        userRepository.save(user);
-        return ResponseEntity.ok(new MessageResponse("Profile updated successfully!"));
-    }
-
-    // Récupérer l'historique des réservations d'un utilisateur
     @GetMapping("/reservations")
     public ResponseEntity<?> getUserReservations(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // Récupérer l'historique des réservations de l'utilisateur connecté
         List<ReservationResponse> reservations = reservationRepository.findByUserId(userDetails.getId())
                 .stream()
                 .map(reservation -> new ReservationResponse(
@@ -62,4 +42,19 @@ public class UserController {
 
         return ResponseEntity.ok(reservations);
     }
+    @PostMapping("/reservations")
+    public ResponseEntity<?> createReservation(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                               @Valid @RequestBody Reservation reservation) {
+        reservation.setId(userDetails.getId());
+        reservation.setStartTime(LocalDateTime.now());
+        reservation.setStatus("PENDING");  // Statut par défaut
+
+        reservationRepository.save(reservation);
+        return ResponseEntity.ok(new MessageResponse("Réservation créée avec succès !"));
+    }
+    @GetMapping("/reservations/test")
+    public ResponseEntity<String> testReservation() {
+        return ResponseEntity.ok("Test réussi !");
+    }
+
 }
