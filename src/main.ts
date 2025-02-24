@@ -10,6 +10,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideHttpClient } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
 
+
 registerLocaleData(en); // Importation des routes
 
 bootstrapApplication(AppComponent, {

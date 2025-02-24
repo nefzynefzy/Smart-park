@@ -1,1 +1,54 @@
-<p>user-dashboard works!</p>
+<div class="dashboard-container">
+    <!-- Section Historique des Réservations -->
+    <div class="reservations-history">
+      <h2>Historique des Réservations</h2>
+      <table *ngIf="reservations?.length">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Parking</th>
+            <th>Heure de début</th>
+            <th>Heure de fin</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reservation of reservations">
+            <td>{{ reservation.date }}</td>
+            <td>{{ reservation.parking }}</td>
+            <td>{{ reservation.startTime }}</td>
+            <td>{{ reservation.endTime }}</td>
+            <td>{{ reservation.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="!reservations?.length">Aucune réservation trouvée.</p>
+    </div>
+  
+    <!-- Section Modification du Profil -->
+    <div class="profile-update">
+      <h2>Modifier Profil</h2>
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+        <label for="firstName">Prénom:</label>
+        <input type="text" id="firstName" formControlName="firstName" required />
+    
+        <label for="lastName">Nom:</label>
+        <input type="text" id="lastName" formControlName="lastName" required />
+    
+        <label for="email">Email:</label>
+        <input type="email" id="email" formControlName="email" required />
+    
+        <label for="phone">Téléphone:</label>
+        <input type="text" id="phone" formControlName="phone" required />
+    
+        <label for="password">Mot de passe:</label>
+        <input type="password" id="password" formControlName="password" />
+    
+        <label for="confirmPassword">Confirmer le mot de passe:</label>
+        <input type="password" id="confirmPassword" formControlName="confirmPassword" />
+    
+        <button type="submit" [disabled]="profileForm.invalid">Mettre à jour</button>
+      </form>
+    </div>
+  </div>
+  

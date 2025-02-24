@@ -1,0 +1,17 @@
+<h2>Historique de mes réservations</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Date</th>
+      <th>Statut</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reservation of reservations">
+      <td>{{ reservation.id }}</td>
+      <td>{{ reservation.date }}</td>
+      <td>{{ reservation.status }}</td>
+    </tr>
+  </tbody>
+</table>

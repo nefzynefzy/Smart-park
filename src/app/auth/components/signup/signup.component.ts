@@ -40,24 +40,29 @@ export class SignupComponent {
   register() {
     if (this.signupForm.invalid) {
       this.message.error("Veuillez corriger les erreurs dans le formulaire", { nzDuration: 5000 });
+      console.log("Formulaire invalide :", this.signupForm.errors);
       return;
     }
   
     const { confirmPassword, ...userData } = this.signupForm.value;
   
+    console.log("Données envoyées :", userData); // 🔴 Vérifie que les données sont bien envoyées
+  
     this.authService.register(userData).subscribe({
       next: (res) => {
-        console.log("Réponse de l'API :", res); // Debugging
-      
-        // Check if the API response contains a success message
-        if (res.message && res.message.includes("User registered successfully")) { 
+        console.log("Réponse de l'API :", res); // 🔴 Vérifie si l'API répond
+  
+        if (res.message && res.message.includes("User registered successfully")) {
           this.message.success("Inscription réussie", { nzDuration: 5000 });
           this.router.navigateByUrl("/login");
         } else {
           this.message.error("Une erreur s'est produite", { nzDuration: 5000 });
         }
-      },      
+      },
+      error: (err) => {
+        console.error("Erreur API :", err); // 🔴 Capture les erreurs API
+        this.message.error("Une erreur est survenue lors de l'inscription", { nzDuration: 5000 });
+      }
     });
-  }
   
-}
+}}
