@@ -12,11 +12,11 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:4200")
+                registry.addMapping("/**") // 🔥 Accepte toutes les routes
+                        .allowedOrigins("*") // 🔥 Accepte toutes les origines (Flutter, Angular, etc.)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(false); // ⚠️ Mets `false` si tu utilises `allowedOrigins("*")`
             }
         };
     }
