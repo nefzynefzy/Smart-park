@@ -1,4 +1,2 @@
-<app-navbar></app-navbar> 
-
-<!-- This will load the main content -->
+<app-navbar *ngIf="!isAuthPage"></app-navbar> <!-- ✅ Navbar caché sur login/signup -->
 <router-outlet></router-outlet>

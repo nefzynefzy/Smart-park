@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,18 +10,33 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // 🔹 Récupérer les infos du profil
-  getUserProfile(userId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${userId}`);
+  // 🔹 Récupérer les infos du profil de l'utilisateur connecté
+  getUserProfile(): Observable<any> {
+    const token = localStorage.getItem('token');  // Récupérer le token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get(`${this.apiUrl}/profile`, { headers });
   }
 
   // 🔹 Mettre à jour les infos de l'utilisateur
-  updateUserProfile(userId: number, userData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update/${userId}`, userData);
+  updateUserProfile(userData: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.put(`${this.apiUrl}/update`, userData, { headers });
   }
 
   // 🔹 Consulter l'historique des réservations
-  getUserReservations(userId: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${userId}/reservations`);
+  getUserReservations(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get(`${this.apiUrl}/reservations`, { headers });
   }
 }

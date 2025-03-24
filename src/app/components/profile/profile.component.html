@@ -1,24 +1,72 @@
-<div class="profile-update">
-  <h2>Modifier Profil</h2>
-  <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-    <label for="firstName">Prénom:</label>
-    <input type="text" id="firstName" formControlName="firstName" required />
-
-    <label for="lastName">Nom:</label>
-    <input type="text" id="lastName" formControlName="lastName" required />
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" formControlName="email" required />
-
-    <label for="phone">Téléphone:</label>
-    <input type="text" id="phone" formControlName="phone" required />
-
-    <label for="password">Mot de passe:</label>
-    <input type="password" id="password" formControlName="password" />
-
-    <label for="confirmPassword">Confirmer le mot de passe:</label>
-    <input type="password" id="confirmPassword" formControlName="confirmPassword" />
-
-    <button type="submit" [disabled]="profileForm.invalid">Mettre à jour</button>
-  </form>
-</div>
+<div class="dashboard-container">
+    <!-- Section Historique des Réservations -->
+    <div class="reservations-history fade-in-left">
+        <h2>Historique des Réservations</h2>
+        <table *ngIf="reservations?.length > 0">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Parking</th>
+                    <th>Heure de début</th>
+                    <th>Heure de fin</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let reservation of reservations">
+                    <td>{{ reservation.date }}</td>
+                    <td>{{ reservation.parking }}</td>
+                    <td>{{ reservation.startTime }}</td>
+                    <td>{{ reservation.endTime }}</td>
+                    <td>{{ reservation.status }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <p *ngIf="!reservations?.length" class="no-data">Aucune réservation trouvée.</p>
+    </div>
+  
+    <!-- Section Modification du Profil -->
+    <div class="profile-update fade-in-right">
+        <h2>Modifier Profil</h2>
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+            <label for="prenom">Prénom:</label>
+            <input type="text" id="prenom" formControlName="prenom" required />
+            <div *ngIf="profileForm.controls['prenom'].invalid && profileForm.controls['prenom'].touched">
+                <p class="error-msg">Le prénom est requis.</p>
+            </div>
+        
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" formControlName="nom" required />
+            <div *ngIf="profileForm.controls['nom'].invalid && profileForm.controls['nom'].touched">
+                <p class="error-msg">Le nom est requis.</p>
+            </div>
+        
+            <label for="email">Email:</label>
+            <input type="email" id="email" formControlName="email" required />
+            <div *ngIf="profileForm.controls['email'].invalid && profileForm.controls['email'].touched">
+                <p class="error-msg">Veuillez entrer un email valide.</p>
+            </div>
+        
+            <label for="numPhone">Téléphone:</label>
+            <input type="text" id="numPhone" formControlName="numPhone" required pattern="[0-9]{8,}" />
+            <div *ngIf="profileForm.controls['numPhone'].invalid && profileForm.controls['numPhone'].touched">
+                <p class="error-msg">Le numéro de téléphone doit contenir au moins 8 chiffres.</p>
+            </div>
+        
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" formControlName="password" minlength="6" />
+            <div *ngIf="profileForm.controls['password'].invalid && profileForm.controls['password'].touched">
+                <p class="error-msg">Le mot de passe doit contenir au moins 6 caractères.</p>
+            </div>
+        
+            <label for="confirmPassword">Confirmer le mot de passe:</label>
+            <input type="password" id="confirmPassword" formControlName="confirmPassword" />
+            <div *ngIf="profileForm.hasError('passwordMismatch') && profileForm.controls['confirmPassword'].touched">
+                <p class="error-msg">Les mots de passe ne correspondent pas.</p>
+            </div>
+        
+            <button type="submit" [disabled]="profileForm.invalid">Mettre à jour</button>
+        </form>
+    </div>
+  </div>
+  

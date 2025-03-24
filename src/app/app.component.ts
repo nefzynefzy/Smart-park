@@ -1,15 +1,26 @@
-import {  HttpClientModule } from '@angular/common/http';
-import { Component} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from "./components/navbar/navbar.component";
+import { Component } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { NavbarComponent } from './components/navbar/navbar.component'; 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, NavbarComponent],
+  imports: [CommonModule, RouterModule, NavbarComponent], 
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'smart-parking-app'
+  isAuthPage: boolean = false;
+isLoginPage: any;
+
+  constructor(private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // Masquer la navbar sur les pages login et sign-up
+        this.isAuthPage = this.router.url === '/auth' ;
+      }
+    });
+  }
 }

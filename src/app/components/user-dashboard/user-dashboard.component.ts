@@ -38,7 +38,8 @@ export class DashboardComponent implements OnInit {
   }
 
   loadUserProfile() {
-    this.userService.getUserProfile(this.userId).subscribe((data) => {
+    this.userService.getUserProfile().subscribe((data) => {
+
       this.profileForm.patchValue(data);
     });
   }
@@ -58,7 +59,8 @@ if (observable) {
   }
 
   updateProfile() {
-    this.userService.updateUserProfile(this.userId, this.profileForm.value).subscribe(() => {
+    this.userService.updateUserProfile(this.profileForm.value).subscribe(() => {
+
       alert('Profil mis à jour avec succès !');
     });
   }

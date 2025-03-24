@@ -1,0 +1,106 @@
+.dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 20px;
+    padding: 20px;
+    background: #f4f2ff;
+    height: 100vh;
+  }
+  
+  .reservations-history, .profile-update {
+    flex: 1;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+  }
+  
+  .fade-in-left {
+    animation-name: fadeInLeft;
+  }
+  
+  .fade-in-right {
+    animation-name: fadeInRight;
+  }
+  
+  @keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+  }
+  
+  @keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+    color: #6a0dad;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  table th {
+    background: #6a0dad;
+    color: white;
+    text-transform: uppercase;
+  }
+  
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #6a0dad, #9b30ff);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+  }
+  
+  button:hover {
+    background: linear-gradient(45deg, #580d9b, #7a1edc);
+  }
+  
+  button:disabled {
+    background: #ddd;
+    cursor: not-allowed;
+  }

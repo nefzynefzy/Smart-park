@@ -1,0 +1,43 @@
+<div class="container" [ngClass]="{'active': isSignUp}">
+    <!-- Sign Up Form -->
+    <div class="form-container sign-up">
+      <form [formGroup]="signupForm" (ngSubmit)="register()">
+        <h1>Créer un compte</h1>
+        <input type="text" placeholder="Prénom" formControlName="firstName">
+        <input type="text" placeholder="Nom" formControlName="lastName">
+        <input type="email" placeholder="Email" formControlName="email">
+        <input type="text" placeholder="Téléphone" formControlName="phone">
+        <input type="password" placeholder="Mot de passe" formControlName="password">
+        <input type="password" placeholder="Confirmer le mot de passe" formControlName="confirmPassword">
+        <button type="submit">S'inscrire</button>
+      </form>
+    </div>
+  
+    <!-- Login Form -->
+    <div class="form-container sign-in">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <h1>Connexion</h1>
+        <input type="email" placeholder="Email" formControlName="email">
+        <input type="password" placeholder="Mot de passe" formControlName="password">
+        <a href="#">Mot de passe oublié ?</a>
+        <button type="submit">Se connecter</button>
+      </form>
+    </div>
+  
+    <!-- Toggle Button -->
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1>Bienvenue !</h1>
+          <p>Déjà un compte ? Connectez-vous.</p>
+          <button class="hidden" (click)="toggleForm()">Se connecter</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1>Rejoignez-nous !</h1>
+          <p>Créez un compte pour profiter de toutes les fonctionnalités.</p>
+          <button class="hidden" (click)="toggleForm()">S'inscrire</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
