@@ -1,106 +1,167 @@
-.dashboard-container {
+.profile-container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Profil Card */
+.profile-card {
+  text-align: center;
+  padding: 20px;
+  border-bottom: 2px solid #eee;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 3px solid #6a11cb;
+}
+
+.profile-header h2 {
+  margin: 5px 0;
+  color: #333;
+}
+
+.user-role {
+  font-size: 0.9rem;
+  color: #6a11cb;
+  font-weight: bold;
+}
+
+.profile-info {
+  margin-top: 15px;
+  text-align: left;
+  padding: 0 20px;
+}
+
+.profile-info p {
+  font-size: 1rem;
+  color: #555;
+  margin: 5px 0;
+}
+
+/* Bouton Modifier */
+.edit-btn {
+  background: #6a11cb;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.edit-btn:hover {
+  background: purple;
+}
+
+/* Historique de réservation */
+.history-section {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.history-section h3 {
+  color: #6a11cb;
+  margin-bottom: 10px;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+}
+
+.history-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #f8f8f8;
+  margin: 5px 0;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  align-items: center;
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.confirmed {
+  background: #4caf50;
+  color: white;
+}
+
+.cancelled {
+  background: #d32f2f;
+  color: white;
+}
+
+.pending {
+  background: #ff9800;
+  color: white;
+}
+.hidden {
+    display: none;
+}
+
+.edit-form {
     display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    gap: 20px;
-    padding: 20px;
-    background: #f4f2ff;
-    height: 100vh;
-  }
-  
-  .reservations-history, .profile-update {
-    flex: 1;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background: #fff;
-    animation-duration: 1s;
-    animation-fill-mode: both;
-  }
-  
-  .fade-in-left {
-    animation-name: fadeInLeft;
-  }
-  
-  .fade-in-right {
-    animation-name: fadeInRight;
-  }
-  
-  @keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-  }
-  
-  @keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-  }
-  
-  h2 {
-    font-size: 1.8rem;
-    color: #6a0dad;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8f8f8;
     border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  table th, table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  table th {
-    background: #6a0dad;
-    color: white;
-    text-transform: uppercase;
-  }
-  
-  input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 5px;
-    margin-bottom: 15px;
+}
+
+.edit-form label {
+    font-weight: bold;
+    color: #6a11cb;
+}
+
+.edit-form input {
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 5px;
     font-size: 1rem;
-  }
-  
-  button {
-    width: 100%;
-    padding: 12px;
-    background: linear-gradient(45deg, #6a0dad, #9b30ff);
+}
+
+.save-btn, .cancel-btn {
+    background: #6a11cb;
     color: white;
+    padding: 8px;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    border-radius: 5px;
     font-size: 1rem;
+    cursor: pointer;
+    margin-top: 5px;
     transition: 0.3s;
-  }
-  
-  button:hover {
-    background: linear-gradient(45deg, #580d9b, #7a1edc);
-  }
-  
-  button:disabled {
-    background: #ddd;
-    cursor: not-allowed;
-  }
+}
+
+.save-btn:hover {
+    background: #4caf50;
+}
+
+.cancel-btn {
+    background: #d32f2f;
+}
+
+.cancel-btn:hover {
+    background: red;
+}

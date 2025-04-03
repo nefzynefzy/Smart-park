@@ -1,12 +1,48 @@
-.home-container {
+/* Styles généraux */
+body {
   font-family: Arial, sans-serif;
   background-color: #f8f8f8;
   color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.home-container {
   padding: 0 20px;
 }
 
+/* Barre de navigation */
+.navbar {
+  background-color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #6c2896;
+}
+
+.navbar a {
+  color: #6c2896;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.navbar a:hover {
+  color: #4a0f68;
+  text-decoration: underline;
+}
+
+/* Section Hero */
 .hero-section {
-  background: linear-gradient(90deg, #6a11cb, purple);
+  background: linear-gradient(90deg, #6a11cb, #4a0f68);
   color: white;
   padding: 60px 20px;
   text-align: center;
@@ -25,14 +61,14 @@
 }
 
 .cta-btn {
-  background-color: #fff;
+  background-color: white;
   color: #6a11cb;
   font-size: 1.2rem;
   padding: 10px 20px;
-  border: none;
   border-radius: 5px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  font-weight: bold;
+  transition: all 0.3s;
 }
 
 .cta-btn:hover {
@@ -41,6 +77,38 @@
   transform: scale(1.05);
 }
 
+/* Présentation */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 80px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.hero-text {
+  width: 50%;
+  padding: 20px;
+}
+
+.hero-text h1 {
+  font-size: 25px;
+  margin-bottom: 10px;
+  color: #111013;
+  font-style: oblique;
+}
+
+
+
+.hero img {
+  width: 45%;
+  border-radius: 10px;
+}
+
+/* Section Fonctionnalités */
 .features-section {
   padding: 40px 20px;
   text-align: center;
@@ -61,12 +129,17 @@
 }
 
 .feature {
-  background-color: #fff;
+  background-color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   width: 30%;
   text-align: center;
+  transition: transform 0.3s;
+}
+
+.feature:hover {
+  transform: scale(1.05);
 }
 
 .feature h3 {
@@ -79,9 +152,10 @@
   color: #666;
 }
 
+/* Section À Propos */
 .about-section {
   padding: 40px 20px;
-  background-color: #fff;
+  background-color: white;
   text-align: center;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -94,9 +168,48 @@
 }
 
 .about-section img {
-  width: 100%; /* Prend toute la largeur du conteneur */
-    max-width: 900px; /* Augmente la taille maximale de l'image */
-    height: auto; /* Garde les proportions originales */
-    display: block;
-    margin: 20px auto; /* Centre l'image */
-    border-radius: 10px; }
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+  border-radius: 10px;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.home-container {
+  flex: 1;
+}
+
+.footer {
+  background-color: #6a11cb;
+  color: white;
+  padding: 15px 0;
+  text-align: center;
+  width: 100%;
+  position: relative; /* Le footer reste en bas du contenu */
+  bottom: 0;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}

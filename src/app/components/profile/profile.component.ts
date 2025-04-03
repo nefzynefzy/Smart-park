@@ -1,39 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
-
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
-
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  standalone: true,  // Cela indique que c'est un composant autonome
+  imports: [FormsModule]
 })
-export class ProfileComponent implements OnInit {
-updateProfile() {
-throw new Error('Method not implemented.');
-}
-  user: any = {};  // Stocke les infos de l'utilisateur
-  profileForm!: FormGroup;
-reservations: any;
+export class ProfileComponent {
+  isEditing: boolean = false; // 🔴 Caché au début
 
-  constructor(private userService: UserService) {}
+  user = {
+    email: 'user@email.com',
+    phone: '+216 12 345 678',
+    vehicle: 'Citroën C3'
+  };
 
-  ngOnInit(): void {
-    this.loadUserProfile();
+  toggleEdit() {
+    this.isEditing = !this.isEditing;
   }
 
-  loadUserProfile(): void {
-    this.userService.getUserProfile().subscribe(
-      data => {
-        this.user = data;
-      },
-      error => {
-        console.error('Erreur de récupération du profil:', error);
-      }
-    );
+  saveChanges() {
+    this.isEditing = false; // 🔴 Cache le formulaire après sauvegarde
   }
 }

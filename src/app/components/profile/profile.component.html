@@ -1,72 +1,61 @@
-<div class="dashboard-container">
-    <!-- Section Historique des Réservations -->
-    <div class="reservations-history fade-in-left">
-        <h2>Historique des Réservations</h2>
-        <table *ngIf="reservations?.length > 0">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Parking</th>
-                    <th>Heure de début</th>
-                    <th>Heure de fin</th>
-                    <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let reservation of reservations">
-                    <td>{{ reservation.date }}</td>
-                    <td>{{ reservation.parking }}</td>
-                    <td>{{ reservation.startTime }}</td>
-                    <td>{{ reservation.endTime }}</td>
-                    <td>{{ reservation.status }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <p *ngIf="!reservations?.length" class="no-data">Aucune réservation trouvée.</p>
+<div class="navbar">
+    <div class="logo">🚗 Parking Intelligent</div>
+    <div>
+        <a href="user-dashboard">Accueil</a>
+        <a href="reservations">Réservation</a>
+        <a href="#">Abonnement</a>
+        <a href="profile">Profil</a>
     </div>
-  
-    <!-- Section Modification du Profil -->
-    <div class="profile-update fade-in-right">
-        <h2>Modifier Profil</h2>
-        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-            <label for="prenom">Prénom:</label>
-            <input type="text" id="prenom" formControlName="prenom" required />
-            <div *ngIf="profileForm.controls['prenom'].invalid && profileForm.controls['prenom'].touched">
-                <p class="error-msg">Le prénom est requis.</p>
-            </div>
-        
-            <label for="nom">Nom:</label>
-            <input type="text" id="nom" formControlName="nom" required />
-            <div *ngIf="profileForm.controls['nom'].invalid && profileForm.controls['nom'].touched">
-                <p class="error-msg">Le nom est requis.</p>
-            </div>
-        
-            <label for="email">Email:</label>
-            <input type="email" id="email" formControlName="email" required />
-            <div *ngIf="profileForm.controls['email'].invalid && profileForm.controls['email'].touched">
-                <p class="error-msg">Veuillez entrer un email valide.</p>
-            </div>
-        
-            <label for="numPhone">Téléphone:</label>
-            <input type="text" id="numPhone" formControlName="numPhone" required pattern="[0-9]{8,}" />
-            <div *ngIf="profileForm.controls['numPhone'].invalid && profileForm.controls['numPhone'].touched">
-                <p class="error-msg">Le numéro de téléphone doit contenir au moins 8 chiffres.</p>
-            </div>
-        
-            <label for="password">Mot de passe:</label>
-            <input type="password" id="password" formControlName="password" minlength="6" />
-            <div *ngIf="profileForm.controls['password'].invalid && profileForm.controls['password'].touched">
-                <p class="error-msg">Le mot de passe doit contenir au moins 6 caractères.</p>
-            </div>
-        
-            <label for="confirmPassword">Confirmer le mot de passe:</label>
-            <input type="password" id="confirmPassword" formControlName="confirmPassword" />
-            <div *ngIf="profileForm.hasError('passwordMismatch') && profileForm.controls['confirmPassword'].touched">
-                <p class="error-msg">Les mots de passe ne correspondent pas.</p>
-            </div>
-        
-            <button type="submit" [disabled]="profileForm.invalid">Mettre à jour</button>
+<div class="profile-container">
+    
+    <!-- Section Profil -->
+    <div class="profile-card">
+        <div class="profile-header">
+            <img src="assets/images/user-avatar.png" alt="Avatar utilisateur" class="profile-img">
+            <h2>Nom de l'Utilisateur</h2>
+            <p class="user-role">Utilisateur régulier</p>
+        </div>
+        <div class="profile-info">
+            <p><strong>📧 Email :</strong> usergmail.com</p>
+            <p><strong>📱 Téléphone :</strong> +216 12 345 678</p>
+            <p><strong>🚗 Véhicule :</strong> Citroën C3</p>
+        </div>
+        <button (click)="toggleEdit()" class="edit-btn">Modifier Profil</button>
+        <form *ngIf="isEditing" (ngSubmit)="saveChanges()" class="edit-form">
+            <label>📧 Email :</label>
+            <input type="email" [(ngModel)]="user.email" name="email">
+
+            <label>📱 Téléphone :</label>
+            <input type="text" [(ngModel)]="user.phone" name="phone">
+
+            <label>🚗 Véhicule :</label>
+            <input type="text" [(ngModel)]="user.vehicle" name="vehicle">
+
+            <button type="submit" class="save-btn">Enregistrer</button>
+            <button type="button" (click)="toggleEdit()" class="cancel-btn">Annuler</button>
         </form>
+
     </div>
-  </div>
-  
+
+    <!-- Historique de réservation -->
+    <div class="history-section">
+        <h3>📅 Historique des Réservations</h3>
+        <ul class="history-list">
+            <li>
+                <span>🅿️ Parking Centre-Ville</span>
+                <span>15 Mars 2025 - 14:00</span>
+                <span class="status confirmed">Confirmée</span>
+            </li>
+            <li>
+                <span>🅿️ Parking Mall Tunis</span>
+                <span>10 Mars 2025 - 18:30</span>
+                <span class="status cancelled">Annulée</span>
+            </li>
+            <li>
+                <span>🅿️ Parking Gare</span>
+                <span>5 Mars 2025 - 08:00</span>
+                <span class="status pending">En attente</span>
+            </li>
+        </ul>
+    </div>
+</div>
