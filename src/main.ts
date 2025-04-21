@@ -15,6 +15,6 @@ registerLocaleData(en); // Importation des routes
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter(appRoutes), provideNzI18n(en_US), importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient() // Fournir le routage ici
+    provideRouter(appRoutes), provideNzI18n(en_US), importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient(), provideAnimationsAsync() // Fournir le routage ici
   ]
 });

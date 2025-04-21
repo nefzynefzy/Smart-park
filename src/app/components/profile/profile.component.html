@@ -1,61 +1,478 @@
-<div class="navbar">
-    <div class="logo">🚗 Parking Intelligent</div>
-    <div>
-        <a href="user-dashboard">Accueil</a>
-        <a href="reservations">Réservation</a>
-        <a href="#">Abonnement</a>
-        <a href="profile">Profil</a>
-    </div>
-<div class="profile-container">
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil Utilisateur | Parking Intelligent</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#FDCD22", secondary: "" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
     
-    <!-- Section Profil -->
-    <div class="profile-card">
-        <div class="profile-header">
-            <img src="assets/images/user-avatar.png" alt="Avatar utilisateur" class="profile-img">
-            <h2>Nom de l'Utilisateur</h2>
-            <p class="user-role">Utilisateur régulier</p>
+  </head>
+  <body class="min-h-screen">
+    <!-- Header -->
+    <header>
+     
+    </header>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- Profile Header -->
+      <div class="bg-white rounded-lg p-8 mb-8 shadow-lg">
+        <div
+          class="flex flex-col md:flex-row items-center md:items-start gap-8"
+        >
+          <div class="flex flex-col items-center">
+            <div
+              class="w-32 h-32 rounded-full bg-gray-100 overflow-hidden border-4 border-primary"
+            >
+              <img
+                src="https://readdy.ai/api/search-image?query=professional%20portrait%20of%20a%20French%20person%2C%20neutral%20expression%2C%20business%20attire%2C%20high%20quality%2C%20studio%20lighting%2C%20professional%20headshot&width=128&height=128&seq=profile1&orientation=squarish"
+                alt="Photo de profil"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <button
+              class="mt-4 bg-primary text-gray-900 font-medium px-4 py-2 !rounded-button flex items-center gap-2 hover:bg-opacity-90 transition-colors whitespace-nowrap"
+    
+        >
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-camera-line"></i>
+              </div>
+              Changer la photo
+            </button>
+          </div>
+          <div class="flex-1">
+            <div
+              class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4"
+            >
+              <div>
+                <h2 class="text-3xl font-bold text-white">Sophie Dubois</h2>
+                <p class="text-gray-500">Membre depuis Octobre 2023</p>
+              </div>
+              <button
+                class="mt-4 md:mt-0 bg-gray-100 text-gray-700 px-4 py-2 !rounded-button flex items-center gap-2 hover:bg-gray-200 transition-colors whitespace-nowrap"
+              >
+                <div class="w-5 h-5 flex items-center justify-center">
+                  <i class="ri-edit-line"></i>
+                </div>
+                Modifier le profil
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div class="bg-gray-50 rounded p-4">
+                <div class="flex items-center gap-3 mb-2">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary bg-opacity-20 flex items-center justify-center text-primary"
+                  >
+                    <i class="ri-car-line ri-lg"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-white">Véhicule principal</h3>
+                    <p class="text-gray-400 text-sm">
+                      Renault Clio - AB-123-CD
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gray-50 rounded p-4">
+                <div class="flex items-center gap-3 mb-2">
+                  <div
+                    class="w-10 h-10 rounded-full bg-primary bg-opacity-20 flex items-center justify-center text-primary"
+                  >
+                    <i class="ri-bank-card-line ri-lg"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-medium text-white">Méthode de paiement</h3>
+                    <p class="text-gray-400 text-sm">
+                      Visa se terminant par 4567
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="profile-info">
-            <p><strong>📧 Email :</strong> usergmail.com</p>
-            <p><strong>📱 Téléphone :</strong> +216 12 345 678</p>
-            <p><strong>🚗 Véhicule :</strong> Citroën C3</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Coordonnées -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+              <h3 class="text-xl font-bold text-white">Mes coordonnées</h3>
+            </div>
+            <div class="p-6 space-y-6">
+              <div class="flex items-start gap-4">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary"
+                >
+                  <i class="ri-mail-line ri-lg"></i>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-400">Email</p>
+                  <p class="text-white">sophie.dubois&#64;gmail.com</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary"
+                >
+                  <i class="ri-smartphone-line ri-lg"></i>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-400">Téléphone</p>
+                  <p class="text-white">+33 6 12 34 56 78</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary"
+                >
+                  <i class="ri-map-pin-line ri-lg"></i>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-400">Adresse</p>
+                  <p class="text-white">15 Rue de la Paix</p>
+                  <p class="text-white">75002 Paris, France</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div
+                  class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary"
+                >
+                  <i class="ri-driving-license-line ri-lg"></i>
+                </div>
+                <div>
+                  <p class="text-sm text-gray-400">Permis de conduire</p>
+                  <p class="text-white">123456789ABC</p>
+                </div>
+              </div>
+              <button
+                class="w-full bg-gray-700 text-white px-4 py-3 !rounded-button flex items-center justify-center gap-2 hover:bg-gray-600 transition-colors mt-4 whitespace-nowrap"
+              >
+                <div class="w-5 h-5 flex items-center justify-center">
+                  <i class="ri-edit-line"></i>
+                </div>
+                Modifier mes coordonnées
+              </button>
+            </div>
+          </div>
+          <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden mt-8">
+            <div class="p-6 border-b border-gray-200">
+              <h3 class="text-xl font-bold text-white">Préférences</h3>
+            </div>
+            <div class="p-6 space-y-6">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary"
+                  >
+                    <i class="ri-notification-3-line ri-lg"></i>
+                  </div>
+                  <div>
+                    <p class="text-white">Notifications par email</p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    value=""
+                    class="sr-only peer"
+                    checked
+                  />
+                  <div
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
+                  ></div>
+                </label>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary"
+                  >
+                    <i class="ri-smartphone-line ri-lg"></i>
+                  </div>
+                  <div>
+                    <p class="text-white">Notifications SMS</p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    value=""
+                    class="sr-only peer"
+                    checked
+                  />
+                  <div
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"
+                  ></div>
+                </label>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary"
+                  >
+                    <i class="ri-earth-line ri-lg"></i>
+                  </div>
+                  <div>
+                    <p class="text-white">Langue</p>
+                  </div>
+                </div>
+                <div class="relative">
+                  <button
+                    class="bg-gray-100 text-gray-700 px-4 py-2 !rounded-button flex items-center gap-2 hover:bg-gray-200 transition-colors whitespace-nowrap"
+                  >
+                    <span>Français</span>
+                    <div class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-arrow-down-s-line"></i>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <button (click)="toggleEdit()" class="edit-btn">Modifier Profil</button>
-        <form *ngIf="isEditing" (ngSubmit)="saveChanges()" class="edit-form">
-            <label>📧 Email :</label>
-            <input type="email" [(ngModel)]="user.email" name="email">
-
-            <label>📱 Téléphone :</label>
-            <input type="text" [(ngModel)]="user.phone" name="phone">
-
-            <label>🚗 Véhicule :</label>
-            <input type="text" [(ngModel)]="user.vehicle" name="vehicle">
-
-            <button type="submit" class="save-btn">Enregistrer</button>
-            <button type="button" (click)="toggleEdit()" class="cancel-btn">Annuler</button>
-        </form>
-
-    </div>
-
-    <!-- Historique de réservation -->
-    <div class="history-section">
-        <h3>📅 Historique des Réservations</h3>
-        <ul class="history-list">
-            <li>
-                <span>🅿️ Parking Centre-Ville</span>
-                <span>15 Mars 2025 - 14:00</span>
-                <span class="status confirmed">Confirmée</span>
-            </li>
-            <li>
-                <span>🅿️ Parking Mall Tunis</span>
-                <span>10 Mars 2025 - 18:30</span>
-                <span class="status cancelled">Annulée</span>
-            </li>
-            <li>
-                <span>🅿️ Parking Gare</span>
-                <span>5 Mars 2025 - 08:00</span>
-                <span class="status pending">En attente</span>
-            </li>
-        </ul>
-    </div>
-</div>
+        <!-- Historique des réservations -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div
+              class="p-6 border-b border-gray-700 flex justify-between items-center"
+            >
+              <div>
+                <h3 class="text-xl font-bold text-white">
+                  Historique des réservations
+                </h3>
+                <p class="text-gray-400">12 réservations au total</p>
+              </div>
+            </div>
+            <div class="p-4">
+              <div class="flex overflow-x-auto mb-6 py-2 gap-2">
+                <button
+                  class="bg-primary text-gray-900 px-4 py-2 !rounded-full font-medium whitespace-nowrap"
+                >
+                  Toutes
+                </button>
+               
+              </div>
+              <div class="space-y-4">
+                <!-- Réservation en cours -->
+                <div
+                  class="reservation-card bg-white rounded-lg p-4 border-l-4 border-blue-500 shadow"
+                >
+                  <div class="flex flex-col md:flex-row justify-between gap-4">
+                    <div>
+                      <div class="flex items-center">
+                        <span class="status-indicator status-ongoing"></span>
+                        <span class="text-blue-400 font-medium">En cours</span>
+                      </div>
+                      <h4 class="text-lg font-bold text-white mt-2">
+                        Parking Centre-Ville
+                      </h4>
+                      <p class="text-gray-300">Place A-42, Niveau -1</p>
+                      <div class="flex items-center gap-2 mt-2 text-gray-400">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-time-line"></i>
+                        </div>
+                        <span>14 Avril 2025, 09:30 - 18:00</span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-end justify-between">
+                      <span class="text-xl font-bold text-white">12,50 €</span>
+                      <button
+                        class="bg-primary text-gray-900 px-4 py-2 !rounded-button font-medium mt-2 hover:bg-opacity-90 transition-colors whitespace-nowrap"
+                      >
+                        Voir détails
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Réservation à venir -->
+                <div
+                  class="reservation-card bg-gray-700 rounded-lg p-4 border-l-4 border-yellow-500"
+                >
+                  <div class="flex flex-col md:flex-row justify-between gap-4">
+                    <div>
+                      <div class="flex items-center">
+                        <span class="status-indicator status-upcoming"></span>
+                        <span class="text-yellow-400 font-medium">À venir</span>
+                      </div>
+                      <h4 class="text-lg font-bold text-white mt-2">
+                        Parking Gare du Nord
+                      </h4>
+                      <p class="text-gray-300">Place B-15, Niveau 2</p>
+                      <div class="flex items-center gap-2 mt-2 text-gray-400">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-time-line"></i>
+                        </div>
+                        <span>16 Avril 2025, 14:00 - 17:30</span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-end justify-between">
+                      <span class="text-xl font-bold text-white">8,75 €</span>
+                      <div class="flex gap-2 mt-2">
+                        <button
+                          class="bg-gray-600 text-white px-4 py-2 !rounded-button hover:bg-gray-500 transition-colors whitespace-nowrap"
+                        >
+                          Annuler
+                        </button>
+                        <button
+                          class="bg-primary text-gray-900 px-4 py-2 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap"
+                        >
+                          Voir détails
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Réservation terminée -->
+                <div
+                  class="reservation-card bg-gray-700 rounded-lg p-4 border-l-4 border-green-500"
+                >
+                  <div class="flex flex-col md:flex-row justify-between gap-4">
+                    <div>
+                      <div class="flex items-center">
+                        <span class="status-indicator status-completed"></span>
+                        <span class="text-green-400 font-medium">Terminée</span>
+                      </div>
+                      <h4 class="text-lg font-bold text-white mt-2">
+                        Parking La Défense
+                      </h4>
+                      <p class="text-gray-300">Place C-28, Niveau 0</p>
+                      <div class="flex items-center gap-2 mt-2 text-gray-400">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-time-line"></i>
+                        </div>
+                        <span>10 Avril 2025, 08:00 - 17:00</span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-end justify-between">
+                      <span class="text-xl font-bold text-white">15,00 €</span>
+                      <div class="flex gap-2 mt-2">
+                        <button
+                          class="bg-gray-600 text-white px-4 py-2 !rounded-button hover:bg-gray-500 transition-colors whitespace-nowrap"
+                        >
+                          Facture
+                        </button>
+                        <button
+                          class="bg-primary text-gray-900 px-4 py-2 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap"
+                        >
+                          Voir détails
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Réservation terminée -->
+                <div
+                  class="reservation-card bg-gray-700 rounded-lg p-4 border-l-4 border-green-500"
+                >
+                  <div class="flex flex-col md:flex-row justify-between gap-4">
+                    <div>
+                      <div class="flex items-center">
+                        <span class="status-indicator status-completed"></span>
+                        <span class="text-green-400 font-medium">Terminée</span>
+                      </div>
+                      <h4 class="text-lg font-bold text-white mt-2">
+                        Parking Opéra
+                      </h4>
+                      <p class="text-gray-300">Place D-05, Niveau -2</p>
+                      <div class="flex items-center gap-2 mt-2 text-gray-400">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-time-line"></i>
+                        </div>
+                        <span>5 Avril 2025, 19:00 - 23:30</span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-end justify-between">
+                      <span class="text-xl font-bold text-white">9,50 €</span>
+                      <div class="flex gap-2 mt-2">
+                        <button
+                          class="bg-gray-600 text-white px-4 py-2 !rounded-button hover:bg-gray-500 transition-colors whitespace-nowrap"
+                        >
+                          Facture
+                        </button>
+                        <button
+                          class="bg-primary text-gray-900 px-4 py-2 !rounded-button font-medium hover:bg-opacity-90 transition-colors whitespace-nowrap"
+                        >
+                          Voir détails
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Réservation annulée -->
+                <div
+                  class="reservation-card bg-gray-700 rounded-lg p-4 border-l-4 border-red-500"
+                >
+                  <div class="flex flex-col md:flex-row justify-between gap-4">
+                    <div>
+                      <div class="flex items-center">
+                        <span class="status-indicator status-cancelled"></span>
+                        <span class="text-red-400 font-medium">Annulée</span>
+                      </div>
+                      <h4 class="text-lg font-bold text-white mt-2">
+                        Parking Montparnasse
+                      </h4>
+                      <p class="text-gray-300">Place E-19, Niveau 1</p>
+                      <div class="flex items-center gap-2 mt-2 text-gray-400">
+                        <div class="w-4 h-4 flex items-center justify-center">
+                          <i class="ri-time-line"></i>
+                        </div>
+                        <span>2 Avril 2025, 10:00 - 14:00</span>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-end justify-between">
+                      <span class="text-xl font-bold text-white">0,00 €</span>
+                      <button
+                        class="bg-primary text-gray-900 px-4 py-2 !rounded-button font-medium mt-2 hover:bg-opacity-90 transition-colors whitespace-nowrap"
+                      >
+                        Voir détails
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6 flex justify-center">
+                <button
+                  class="bg-gray-700 text-white px-6 py-2 !rounded-button hover:bg-gray-600 transition-colors whitespace-nowrap"
+                >
+                  Voir plus de réservations
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+   
+  </body>
+</html>

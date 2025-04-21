@@ -1,167 +1,36 @@
-.profile-container {
-  max-width: 800px;
-  margin: 40px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Profil Card */
-.profile-card {
-  text-align: center;
-  padding: 20px;
-  border-bottom: 2px solid #eee;
-}
-
-.profile-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.profile-img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-  border: 3px solid #6a11cb;
-}
-
-.profile-header h2 {
-  margin: 5px 0;
-  color: #333;
-}
-
-.user-role {
-  font-size: 0.9rem;
-  color: #6a11cb;
-  font-weight: bold;
-}
-
-.profile-info {
-  margin-top: 15px;
-  text-align: left;
-  padding: 0 20px;
-}
-
-.profile-info p {
-  font-size: 1rem;
-  color: #555;
-  margin: 5px 0;
-}
-
-/* Bouton Modifier */
-.edit-btn {
-  background: #6a11cb;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 15px;
-  transition: 0.3s;
-}
-
-.edit-btn:hover {
-  background: purple;
-}
-
-/* Historique de réservation */
-.history-section {
-  margin-top: 30px;
-  text-align: left;
-}
-
-.history-section h3 {
-  color: #6a11cb;
-  margin-bottom: 10px;
-}
-
-.history-list {
-  list-style: none;
-  padding: 0;
-}
-
-.history-list li {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  background: #f8f8f8;
-  margin: 5px 0;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  align-items: center;
-}
-
-.status {
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.confirmed {
-  background: #4caf50;
-  color: white;
-}
-
-.cancelled {
-  background: #d32f2f;
-  color: white;
-}
-
-.pending {
-  background: #ff9800;
-  color: white;
-}
-.hidden {
-    display: none;
-}
-
-.edit-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 15px;
-    padding: 10px;
-    background: #f8f8f8;
-    border-radius: 8px;
-}
-
-.edit-form label {
-    font-weight: bold;
-    color: #6a11cb;
-}
-
-.edit-form input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.save-btn, .cancel-btn {
-    background: #6a11cb;
-    color: white;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 5px;
-    transition: 0.3s;
-}
-
-.save-btn:hover {
-    background: #4caf50;
-}
-
-.cancel-btn {
-    background: #d32f2f;
-}
-
-.cancel-btn:hover {
-    background: red;
-}
+:where([class^="ri-"])::before { content: "\f3c2"; }
+      body {
+      background-color: #ffffffef;
+      color: #1f2937;
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      }
+      .reservation-card {
+      transition: transform 0.2s ease-in-out;
+      }
+      .reservation-card:hover {
+      transform: translateY(-4px);
+      }
+      .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      }
+      .status-completed {
+      background-color: #10B981;
+      }
+      .status-ongoing {
+      background-color: #3B82F6;
+      }
+      .status-upcoming {
+      background-color: #F59E0B;
+      }
+      .status-cancelled {
+      background-color: #EF4444;
+      }
+    

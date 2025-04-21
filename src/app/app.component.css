@@ -1,52 +1,7 @@
-.smartpark-navbar {
-    background: linear-gradient(90deg, #6a11cb, #2575fc);
-    padding: 15px 30px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: space-between; /* Alignement des éléments à droite et à gauche */
-    align-items: center;
-}
 
-.navbar-brand {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: #6a11cb; /* Mettre "Smart Park" en violet */
-}
-
-.navbar-nav {
-    display: flex; /* Aligner les éléments horizontalement */
-    gap: 20px; /* Ajouter un espace entre les liens */
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.navbar-nav .nav-link {
-    font-size: 1.2rem;
-    color: #6a11cb !important; /* Texte des liens en violet */
-    padding: 8px 15px;
-    transition: all 0.3s ease-in-out;
-    text-decoration: none; /* Supprimer le soulignement */
-}
-
-.navbar-nav .nav-link:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
-}
-
-.navbar-nav .text-danger {
-    font-weight: bold;
-}
-
-.navbar-toggler {
-    border: none;
-}
-
-@media screen and (max-width: 768px) {
-    .navbar-nav {
-        text-align: center;
-    }
-    .navbar-nav .nav-link {
-        padding: 10px;
-    }
-}
+/* Espace sous la navbar (présente sauf dans auth) */
+.with-navbar {
+    padding-top: 90px; /* Ajuste selon la hauteur exacte de ta navbar */
+  }
+  
+  

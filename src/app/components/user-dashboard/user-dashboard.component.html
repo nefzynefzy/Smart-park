@@ -1,64 +1,719 @@
-
-<div class="home-container">
-  <div class="navbar">
-    <div class="logo">🚗 Parking Intelligent</div>
-    <div>
-        <a href="user-dashboard">Accueil</a>
-        <a href="reservations">Réservation</a>
-        <a href="#">Abonnement</a>
-        <a href="profile">Profil</a>
-    </div>
-</div>  
-    <header class="hero-section">
-      
-      <div class="hero-content">
-        <h1 class="hero-title">Bienvenue sur Smart Park</h1>
-        <p class="hero-description">Votre solution de gestion de parkings intelligents avec réservation en temps réel.</p>
-        <a href="/find-parking" class="cta-btn">Trouver une Place</a>
-      </div>
-    </header>
-    <div class="hero">
-      <div class="hero-text">
-          <h1>Bienvenue sur Smart Park – La solution moderne et intelligente pour gérer vos parkings efficacement. Avec notre plateforme web innovante, vous pouvez réserver votre place de stationnement en temps réel, gérer vos abonnements et effectuer des paiements sécurisés en toute simplicité. Simplifiez votre expérience de stationnement grâce à Smart Park !"</h1>
-          
-      </div>
-      <img src="assets/images/b.png" alt="Image Parking">
-  </div>
-  
-  
-    <section class="features-section">
-      <h2 class="section-title">Nos Fonctionnalités</h2>
-      <div class="features">
-        <div class="feature">
-          <h3>📍 Trouver un Parking</h3>
-          <p>Recherchez et trouvez des parkings disponibles près de vous avec des informations en temps réel.</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Park - Intelligent Parking Solutions</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#15B8A6", secondary: "#22c55e" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+   
+    <!-- Hero Section -->
+    <section class="pt-24 relative overflow-hidden">
+      <div
+        class="absolute inset-0 w-full h-full"
+        style="background-image: url('https://readdy.ai/api/search-image?query=A%20modern%20smart%20parking%20system%20with%20digital%20displays%20and%20sensors%20in%20a%20clean%20urban%20parking%20lot%2C%20cars%20neatly%20parked%20with%20blue%20holographic%20interface%20showing%20available%20spaces%2C%20professional%20environment%2C%20soft%20lighting%2C%20high-tech%20feel%2C%20minimalist%20aesthetic%2C%20the%20left%20side%20of%20the%20image%20has%20a%20clean%20white%20background%20that%20gradually%20transitions%20to%20the%20parking%20scene&width=1920&height=800&seq=1&orientation=landscape'); background-size: cover; background-position: right center;"
+      ></div>
+      <div class="relative container mx-auto px-6 py-20">
+        <div class="w-full flex flex-col md:flex-row items-center">
+          <div class="w-full md:w-1/2 hero-gradient py-12 px-6 rounded-xl">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Revolutionize Your Parking Experience
+            </h1>
+            <p class="text-lg text-gray-700 mb-8">
+              Our intelligent parking system reduces parking time by 70% while
+              providing real-time space availability and guidance. Powered by
+              advanced AI technology.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <a
+                href="#"
+                class="bg-primary text-white px-8 py-3 !rounded-button font-medium hover:bg-primary/90 transition-colors text-center whitespace-nowrap"
+                >Get Started</a
+              >
+              <a
+                href="#"
+                class="bg-white text-gray-800 border border-gray-300 px-8 py-3 !rounded-button font-medium hover:bg-gray-50 transition-colors text-center whitespace-nowrap"
+                >Watch Demo</a
+              >
+            </div>
+            <div class="mt-8 flex items-center space-x-4">
+              <div class="flex -space-x-2">
+                <img
+                  src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20diverse%20woman%20with%20natural%20makeup%20and%20friendly%20smile%20on%20white%20background&width=48&height=48&seq=2&orientation=squarish"
+                  alt="User"
+                  class="w-10 h-10 rounded-full border-2 border-white object-cover object-top"
+                />
+                <img
+                  src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20middle-aged%20asian%20man%20with%20glasses%20and%20friendly%20smile%20on%20white%20background&width=48&height=48&seq=3&orientation=squarish"
+                  alt="User"
+                  class="w-10 h-10 rounded-full border-2 border-white object-cover object-top"
+                />
+                <img
+                  src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20african%20american%20man%20with%20short%20hair%20and%20friendly%20smile%20on%20white%20background&width=48&height=48&seq=4&orientation=squarish"
+                  alt="User"
+                  class="w-10 h-10 rounded-full border-2 border-white object-cover object-top"
+                />
+              </div>
+              <p class="text-sm text-gray-600">
+                Trusted by more, parking facilities worldwide
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="feature">
-          <h3>📅 Réservations</h3>
-          <p>Réservez votre place de parking à l'avance pour une tranquillité d'esprit.</p>
+      </div>
+      <div
+        class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent"
+      ></div>
+    </section>
+    <!-- Key Features Section -->
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Smart Features for Efficient Parking
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Our intelligent system combines hardware and software to streamline
+            your parking experience and provide valuable insights.
+          </p>
         </div>
-        <div class="feature">
-          <h3>💳 Paiements Sécurisés</h3>
-          <p>Effectuez vos paiements de manière sécurisée et rapide via l'application.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-sm border border-gray-100 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-6"
+            >
+              <i class="ri-ai-generate-fill ri-xl text-primary"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              AI-Powered Analysis
+            </h3>
+            <p class="text-gray-600">
+              Automatically detect parking patterns and provide instant space
+              availability suggestions.
+            </p>
+          </div>
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-sm border border-gray-100 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-6"
+            >
+              <i class="ri-car-line ri-xl text-primary"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Vehicle Recognition
+            </h3>
+            <p class="text-gray-600">
+              Accurately detect and identify vehicles with our advanced computer
+              vision technology.
+            </p>
+          </div>
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-sm border border-gray-100 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-6"
+            >
+              <i class="ri-dashboard-3-line ri-xl text-primary"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Analytics Dashboard
+            </h3>
+            <p class="text-gray-600">
+              Gain valuable insights into parking usage patterns with
+              comprehensive data visualization.
+            </p>
+          </div>
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-sm border border-gray-100 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-6"
+            >
+              <i class="ri-cloud-line ri-xl text-primary"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-3">
+              Cloud Integration
+            </h3>
+            <p class="text-gray-600">
+              Seamlessly sync with your existing parking management system and
+              access your data from anywhere, anytime.
+            </p>
+          </div>
         </div>
       </div>
     </section>
-  
-    <section class="about-section">
-      <h2 class="section-title">À Propos de Smart Park</h2>
-      <p>Smart Park est une application innovante qui révolutionne la gestion des parkings. Grâce à notre technologie avancée, nous vous offrons un accès facile aux parkings disponibles, vous permettant de réserver et payer en toute sécurité.</p>
-      <img src="assets/images/smart-parking.jpeg" alt="Parking intelligent" class="feature-image">
-    </section>
-  </div>
-  <footer class="footer">
-    <div class="footer-content">
-        <p>&copy; 2025 Smart Park. Tous droits réservés.</p>
-        <div class="footer-links">
-            <a href="#">Mentions légales</a>
-            <a href="#">Politique de confidentialité</a>
-            <a href="#">Contact</a>
+    <!-- Device Information Section -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row items-center gap-12">
+          <div class="w-full lg:w-1/2">
+            <div class="relative">
+              <img
+                src="https://readdy.ai/api/search-image?query=A%20sleek%20modern%20smart%20parking%20system%20with%20blue%20LED%20indicators%20installed%20in%20a%20parking%20lot%2C%20the%20system%20has%20a%20minimalist%20design%20with%20sensors%20and%20digital%20displays%2C%20professional%20product%20photography%20with%20soft%20lighting%20and%20subtle%20shadows%2C%20high-tech%20parking%20management%20tool&width=600&height=500&seq=5&orientation=landscape"
+                alt="Smart Parking System"
+                class="w-full rounded-xl shadow-lg"
+              />
+              <div
+                class="absolute -bottom-4 -right-4 bg-white p-3 rounded-lg shadow-md"
+              >
+                <div class="flex items-center space-x-2">
+                  <div
+                    class="w-3 h-3 bg-green-500 rounded-full animate-pulse"
+                  ></div>
+                  <span class="text-sm font-medium text-gray-700"
+                    >Device Connected</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full lg:w-1/2">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">
+              SmartPark Pro X7
+            </h2>
+            <p class="text-lg text-gray-600 mb-8">
+              Our flagship parking system combines precision sensors with
+              intelligent analysis to transform your parking management.
+            </p>
+            <div class="space-y-6">
+              <div class="flex items-start">
+                <div
+                  class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4 mt-1"
+                >
+                  <i class="ri-speed-line ri-lg text-primary"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    Ultra-Fast Processing
+                  </h3>
+                  <p class="text-gray-600">
+                    Detect and analyze up to 60 vehicles per minute with 99.8%
+                    accuracy.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div
+                  class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4 mt-1"
+                >
+                  <i class="ri-battery-charge-line ri-lg text-primary"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    Long Battery Life
+                  </h3>
+                  <p class="text-gray-600">
+                    Up to 12 hours of continuous use on a single charge with
+                    quick recharge capability.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div
+                  class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4 mt-1"
+                >
+                  <i class="ri-wifi-line ri-lg text-primary"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    Wireless Connectivity
+                  </h3>
+                  <p class="text-gray-600">
+                    Connect via Wi-Fi, Bluetooth, or USB-C for maximum
+                    flexibility in any environment.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <div
+                  class="w-10 h-10 flex items-center justify-center bg-primary/10 rounded-full mr-4 mt-1"
+                >
+                  <i class="ri-hard-drive-2-line ri-lg text-primary"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                    Expandable Storage
+                  </h3>
+                  <p class="text-gray-600">
+                    128GB internal storage with expandable SD card slot for
+                    additional capacity.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-10">
+              <a
+                href="#"
+                class="bg-primary text-white px-8 py-3 !rounded-button font-medium hover:bg-primary/90 transition-colors inline-block whitespace-nowrap"
+                >View Specifications</a
+              >
+            </div>
+          </div>
         </div>
-    </div>
-</footer>
-
-  
+      </div>
+    </section>
+    <!-- Performance Analytics Section -->
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            Track Occupancy & Efficiency
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Our comprehensive analytics dashboard provides valuable insights
+            into parking occupancy and your facility's efficiency.
+          </p>
+        </div> 
+      </div>
+    </section>
+    <section class="map-section">
+      <h2 class="section-title">📍 Où nous trouver ?</h2>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps?q=36.8075969687945,10.073328443701746&z=17&output=embed"
+          width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </section>
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            What Facility Managers Are Saying
+          </h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Join thousands of satisfied facility managers who have transformed
+            their parking operations with our smart system.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex items-center mb-6">
+              <img
+                src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20middle-aged%20woman%20with%20short%20brown%20hair%20and%20glasses%2C%20friendly%20smile%2C%20business%20professional%2C%20facility%20manager%2C%20white%20background%2C%20high%20quality%20portrait&width=64&height=64&seq=6&orientation=squarish"
+                alt="Rebecca Thompson"
+                class="w-14 h-14 rounded-full object-cover object-top mr-4"
+              />
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900">
+                  Rebecca Thompson
+                </h4>
+                <p class="text-sm text-gray-600">
+                  Facility Manager, Westfield Shopping Center
+                </p>
+              </div>
+            </div>
+            <p class="text-gray-700">
+              "The SmartPark system has completely transformed how we manage our
+              parking facilities. What used to cause constant congestion now
+              runs smoothly, and the data insights have helped us optimize our
+              space allocation and pricing strategy."
+            </p>
+            <div class="mt-6 flex items-center">
+              <div class="flex text-yellow-400">
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex items-center mb-6">
+              <img
+                src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20middle-aged%20man%20with%20salt%20and%20pepper%20hair%2C%20friendly%20smile%2C%20business%20professional%2C%20parking%20operations%20manager%2C%20white%20background%2C%20high%20quality%20portrait&width=64&height=64&seq=7&orientation=squarish"
+                alt="Michael Donovan"
+                class="w-14 h-14 rounded-full object-cover object-top mr-4"
+              />
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900">
+                  Michael Donovan
+                </h4>
+                <p class="text-sm text-gray-600">
+                  Operations Director, Metropolitan Airport Parking
+                </p>
+              </div>
+            </div>
+            <p class="text-gray-700">
+              "With over 5,000 parking spaces to manage, efficiency was our
+              biggest challenge. The SmartPark system not only saves us time but
+              also helps us identify usage patterns across our facilities so we
+              can optimize staffing and resources proactively."
+            </p>
+            <div class="mt-6 flex items-center">
+              <div class="flex text-yellow-400">
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-half-fill ri-sm"></i>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex items-center mb-6">
+              <img
+                src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20asian%20woman%20with%20long%20black%20hair%2C%20friendly%20smile%2C%20business%20professional%2C%20smart%20city%20planner%2C%20white%20background%2C%20high%20quality%20portrait&width=64&height=64&seq=8&orientation=squarish"
+                alt="Jennifer Chen"
+                class="w-14 h-14 rounded-full object-cover object-top mr-4"
+              />
+              <div>
+                <h4 class="text-lg font-semibold text-gray-900">
+                  Jennifer Chen
+                </h4>
+                <p class="text-sm text-gray-600">
+                  Smart City Planner, Urban Development Authority
+                </p>
+              </div>
+            </div>
+            <p class="text-gray-700">
+              "I was skeptical at first about implementing another parking
+              technology, but the SmartPark system is incredibly intuitive. It
+              integrates seamlessly with our existing infrastructure and gives
+              us insights into urban mobility patterns we never had before."
+            </p>
+            <div class="mt-6 flex items-center">
+              <div class="flex text-yellow-400">
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+                <i class="ri-star-fill ri-sm"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Call to Action Section -->
+    <section class="py-20 bg-primary/5">
+      <div class="container mx-auto px-6">
+        <div
+          class="bg-white rounded-2xl shadow-lg p-8 md:p-12 relative overflow-hidden"
+        >
+          <div
+            class="absolute top-0 right-0 w-1/3 h-full opacity-10"
+            style="background-image: url('https://readdy.ai/api/search-image?query=abstract%20blue%20and%20white%20geometric%20pattern%20with%20technology%20feel%2C%20minimalist%20design%2C%20subtle%20gradient%2C%20professional%20look&width=400&height=600&seq=9&orientation=portrait'); background-size: cover;"
+          ></div>
+          <div class="relative z-10 max-w-3xl">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">
+              Ready to Transform Your Parking Operations?
+            </h2>
+            <p class="text-lg text-gray-600 mb-8">
+              Join thousands of facility managers worldwide who have optimized
+              their space utilization and improved customer satisfaction with
+              SmartPark.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 mb-10">
+              <a
+                href="#"
+                class="bg-primary text-white px-8 py-3 !rounded-button font-medium hover:bg-primary/90 transition-colors text-center whitespace-nowrap"
+                >Start Free Trial</a
+              >
+              <a
+                href="#"
+                class="bg-white text-gray-800 border border-gray-300 px-8 py-3 !rounded-button font-medium hover:bg-gray-50 transition-colors text-center whitespace-nowrap"
+                >Schedule Demo</a
+              >
+            </div>
+            <div class="flex flex-col md:flex-row md:items-center gap-6">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 flex items-center justify-center">
+                  <i class="ri-check-line ri-lg text-primary"></i>
+                </div>
+                <span class="text-gray-700">30-day free trial</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 flex items-center justify-center">
+                  <i class="ri-check-line ri-lg text-primary"></i>
+                </div>
+                <span class="text-gray-700">No credit card required</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 flex items-center justify-center">
+                  <i class="ri-check-line ri-lg text-primary"></i>
+                </div>
+                <span class="text-gray-700">Free onboarding support</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-16">
+          <div class="text-center mb-10">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Stay Updated</h3>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+              Subscribe to our newsletter for the latest product updates,
+              educational insights, and special offers.
+            </p>
+          </div>
+          <form class="max-w-xl mx-auto">
+            <div class="flex flex-col sm:flex-row gap-4">
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                class="flex-1 px-4 py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+              />
+              <button
+                type="submit"
+                class="bg-primary text-white px-6 py-3 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap"
+              >
+                Subscribe
+              </button>
+            </div>
+            <div class="mt-3 flex items-center gap-2">
+              <label class="custom-checkbox">
+                <input type="checkbox" checked />
+                <span class="checkmark"></span>
+              </label>
+              <span class="text-sm text-gray-600"
+                >I agree to receive marketing communications from
+                SmartMark</span
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+      <div class="container mx-auto px-6">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+        >
+          <div>
+            <a
+              href="#"
+              class="text-2xl font-['Pacifico'] text-white mb-6 inline-block"
+              >logo</a
+            >
+            <p class="text-gray-400 mb-6">
+              Transforming the way facilities manage parking and provide
+              guidance with intelligent technology.
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full"
+              >
+                <i class="ri-twitter-x-line ri-lg"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full"
+              >
+                <i class="ri-facebook-fill ri-lg"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full"
+              >
+                <i class="ri-linkedin-fill ri-lg"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full"
+              >
+                <i class="ri-instagram-line ri-lg"></i>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-6">Products</h4>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >SmartPark Pro X7</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >SmartPark Lite</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Analytics Dashboard</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Mobile App</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >API & Integrations</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-6">Resources</h4>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Documentation</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Knowledge Base</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Community Forum</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Webinars</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Case Studies</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-6">Company</h4>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Careers</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Press</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Contact</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Privacy Policy</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center"
+        >
+          <p class="text-gray-500 text-sm mb-4 md:mb-0">
+            © 2025 SmartPark. All rights reserved.
+          </p>
+          <div class="flex items-center space-x-6">
+            <div class="flex items-center">
+              <i class="ri-visa-line ri-lg text-gray-400 mr-2"></i>
+              <i class="ri-mastercard-line ri-lg text-gray-400 mr-2"></i>
+              <i class="ri-paypal-line ri-lg text-gray-400 mr-2"></i>
+              <i class="ri-apple-fill ri-lg text-gray-400"></i>
+            </div>
+            <div class="flex items-center space-x-4">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors text-sm"
+                >Terms</a
+              >
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors text-sm"
+                >Privacy</a
+              >
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors text-sm"
+                >Cookies</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+   
+  </body>
+</html>
