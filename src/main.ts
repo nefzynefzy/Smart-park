@@ -13,6 +13,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { ApplicationConfig } from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideNzIcons } from './icons-provider';
+
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(appRoutes),
