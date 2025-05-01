@@ -68,7 +68,10 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
-                        .requestMatchers("/api/user/reservations").permitAll() // ✅ Ajout pour autoriser la route
+                        .requestMatchers("/api/user/reservations").permitAll()
+                        .requestMatchers("/api/user/update").permitAll()
+                        .requestMatchers("/api/createReservation").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
@@ -81,6 +84,21 @@ public class WebSecurityConfig {
                 .rememberMe(rememberMe -> rememberMe
                         .tokenValiditySeconds(86400)
                         .key("smartParkingSecureKey")
+                )
+                .formLogin(login -> login
+                        .successHandler((request, response, authentication) -> {
+                            authentication.getAuthorities().forEach(authority -> {
+                                try {
+                                    if (authority.getAuthority().equals("ROLE_ADMIN")) {
+                                        response.sendRedirect("/admin/dashboard"); // Redirect admin
+                                    } else {
+                                        response.sendRedirect("/user/dashboard"); // Redirect user
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        })
                 )
                 .build();
     }

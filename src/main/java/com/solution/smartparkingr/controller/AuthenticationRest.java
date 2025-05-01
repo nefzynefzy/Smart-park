@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins   = "http://localhost:4200")
+@CrossOrigin(origins   = "*")
 
 public class AuthenticationRest {
 
@@ -89,11 +89,6 @@ public class AuthenticationRest {
                         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
                         roles.add(adminRole);
-                        break;
-                    case "manager":
-                        Role managerRole = roleRepository.findByName(ERole.ROLE_MANAGER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                        roles.add(managerRole);
                         break;
                     case "user":
                         Role userRole = roleRepository.findByName(ERole.ROLE_USER)

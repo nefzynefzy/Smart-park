@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,11 +50,21 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles = new HashSet<>();
 
-    private Long subscriptionId;
+    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    //private List<Subscription> subscriptions;
+
+    private Set<Role> roles = new HashSet<>();
+    // boolean emailVerified;
+    //private String verificationToken;
 
     private boolean active = true; // Enables account activation/deactivation
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Vehicle> vehicles;
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservations;
+
 
     public User() {
     }
@@ -121,15 +132,6 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
-    public Long getSubscriptionId() {
-        return subscriptionId;
-    }
-
-    public void setSubscriptionId(Long subscriptionId) {
-        this.subscriptionId = subscriptionId;
-    }
-
     public boolean isActive() {
         return active;
     }
