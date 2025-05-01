@@ -1,0 +1,54 @@
+/* Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.reservation-card {
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.status-indicator {
+  @apply w-3 h-3 rounded-full mr-2;
+
+  &.status-ongoing {
+    @apply bg-blue-500;
+  }
+
+  &.status-upcoming {
+    @apply bg-yellow-500;
+  }
+
+  &.status-completed {
+    @apply bg-green-500;
+  }
+
+  &.status-cancelled {
+    @apply bg-red-500;
+  }
+}
+
+.rounded-button {
+  border-radius: 8px;
+}
+
+/* Fonts */
+.font-pacifico {
+  font-family: 'Pacifico', cursive;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Remix icons */
+[class^="ri-"]::before {
+  content: "\f3c2";
+}

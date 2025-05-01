@@ -9,7 +9,19 @@ import { importProvidersFrom } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
-
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { ApplicationConfig } from '@angular/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { provideNzIcons } from './icons-provider';
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(appRoutes),
+    provideAnimations(),
+    provideHttpClient(),
+    provideNativeDateAdapter(), provideNzIcons(),
+    // Autres providers...
+  ],
+}).catch((err) => console.error(err));
 
 registerLocaleData(en); // Importation des routes
 

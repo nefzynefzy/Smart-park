@@ -1,8 +1,11 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./", // Ajout crucial
     "outDir": "./dist/out-tsc",
+    "paths": {
+      "@angular/*": ["node_modules/@angular/*"] // Ajoutez cette section
+    },
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

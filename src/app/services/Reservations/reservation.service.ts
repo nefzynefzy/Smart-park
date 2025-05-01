@@ -13,7 +13,7 @@ export class ReservationService {
   constructor(private http: HttpClient) {}
 
   createReservations(reservations: Reservation[]) {
-    return this.http.post(`${this.apiUrl}/multi`, reservations); // Exemple: POST vers /api/reservations/multi
-  }
-  
+  return this.http.post(`${this.apiUrl}/multi`, reservations); // Exemple: POST vers /api/reservations/multi
+}
+
 }

@@ -1,18 +1,23 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // ✅ Ajouté pour ngClass
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
+// Interface pour la réponse d'inscription
+interface RegisterResponse {
+  message?: string;
+}
+
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [
-    CommonModule, // ✅ Nécessaire pour ngClass
-    ReactiveFormsModule, // ✅ Nécessaire pour formGroup
-    FormsModule, // ✅ Nécessaire pour [(ngModel)]
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
     HttpClientModule
   ],
   templateUrl: './auth.component.html',
@@ -42,7 +47,7 @@ export class AuthComponent {
       email: ['', [Validators.required, Validators.email, Validators.maxLength(50)]],
       phone: ['', [Validators.required, Validators.pattern(/^(?:\+?\d{1,3}[- ]?)?\d{8,15}$/)]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(120)]],
-      confirmPassword: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
 
@@ -61,45 +66,44 @@ export class AuthComponent {
   // Connexion
   login() {
     if (this.loginForm.invalid) {
-      this.message.error("Veuillez remplir tous les champs correctement.");
+      this.message.error('Veuillez remplir tous les champs correctement');
       return;
     }
-  
-    const loginData = this.loginForm.value;
-    this.authService.login(loginData).subscribe({
-      next: (response: any) => {
-        // Stocker le token et l'ID utilisateur
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('userId', response.userId);  // Stockage de l'ID de l'utilisateur
-        this.message.success("Connexion réussie !");
-        this.router.navigate(['/user-dashboard']);
+
+    this.authService.login({
+      email: this.loginForm.value.email!,
+      password: this.loginForm.value.password!
+    }).subscribe({
+      next: () => {
+        // Redirection basée sur le rôle
+        const redirectUrl = this.authService.isAdmin() ? '/admin-dashboard' : '/user-dashboard';
+        this.router.navigate([redirectUrl]);
       },
       error: () => {
-        this.message.error("Échec de la connexion. Vérifiez vos identifiants.");
+        this.message.error('Identifiants incorrects');
       }
     });
   }
-  
 
   // Inscription
   register() {
     if (this.signupForm.invalid) {
-      this.message.error("Veuillez corriger les erreurs du formulaire.");
+      this.message.error('Veuillez corriger les erreurs du formulaire');
       return;
     }
 
     const { confirmPassword, ...userData } = this.signupForm.value;
     this.authService.register(userData).subscribe({
-      next: (res) => {
-        if (res.message?.includes("User registered successfully")) {
-          this.message.success("Inscription réussie !");
-          this.router.navigateByUrl("/login");
+      next: (res: RegisterResponse) => {
+        if (res.message?.includes('User registered successfully')) {
+          this.message.success('Inscription réussie !');
+          this.isSignUp = false; // Revenir au formulaire de login
         } else {
-          this.message.error("Une erreur s'est produite.");
+          this.message.error('Une erreur s\'est produite');
         }
       },
       error: () => {
-        this.message.error("Une erreur est survenue lors de l'inscription.");
+        this.message.error('Une erreur est survenue lors de l\'inscription');
       }
     });
   }

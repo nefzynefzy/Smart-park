@@ -23,6 +23,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "node_modules/remixicon/fonts",
               {
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
@@ -34,8 +35,16 @@
               "src/theme.less",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css",
-              "node_modules/mapbox-gl/dist/mapbox-gl.css"
+              "node_modules/mapbox-gl/dist/mapbox-gl.css",
+
+              "node_modules/remixicon/fonts/remixicon.css",
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+              "src/styles.scss",
+              "src/theme.scss",
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
             ]
+
+
 
               
             ,

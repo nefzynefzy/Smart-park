@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';;
 import { ReservationService } from '../../services/Reservations/reservation.service';  // Service pour les réservations
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; 
 
 
 @Component({
@@ -10,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
   standalone: true,  // Composant autonome
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css'],
-  imports: [ReactiveFormsModule, HttpClientModule] // Assurer que ReactiveFormsModule est importé
+  imports: [ReactiveFormsModule] // Assurer que ReactiveFormsModule est importé
   // Assurer que ReactiveFormsModule est importé
 })
 export class DashboardComponent implements OnInit {
