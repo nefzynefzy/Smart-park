@@ -1,78 +1,42 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard/auth.guard.component';
 
-
-export const appRoutes: Routes = [
-  {
-    path: '',
-    redirectTo: 'auth',
-    pathMatch: 'full'
-  },
-  {
+export const routes: Routes = [
+  { 
     path: 'auth',
-    loadComponent: () => import('./auth/components/auth/auth.component').then(m => m.AuthComponent)
+    loadComponent: () => import('./auth/components/auth/auth.component').then(m => m.AuthComponent),
+    data: { hideNavbar: true }
   },
   {
-    path: '',
+    path: 'app',
+    canActivate: [AuthGuard],
     loadComponent: () => import('./layout/layout.component').then(m => m.LayoutComponent),
     children: [
-      // Routes Admin
       {
-        path: 'admin-dashboard',
-        loadComponent: () => import('./dashboard-admin/admin-dashboard.component').then(m => m.AdminDashboardComponent),
-        canActivate: [AuthGuard],
+        path: 'user/dashboard',
+        data: { role: 'USER' },
         children: [
-          {
-            path: 'analytics',
-            loadComponent: () => import('./dashboard-admin/components/analytics/analytics.component').then(m => m.AnalyticsComponent)
-          },
-          {
-            path: 'users',
-            loadComponent: () => import('./dashboard-admin/components/user-management/user-management.component').then(m => m.UserManagementComponent)
-          },
-          {
-            path: 'settings',
-            loadComponent: () => import('./dashboard-admin/components/parking-settings/parking-settings.component').then(m => m.ParkingSettingsComponent)
-          },
-          {
+          { 
             path: '',
-            redirectTo: 'analytics',
-            pathMatch: 'full'
-          }
+            loadComponent: () => import('./components/user-dashboard/user-dashboard.component').then(m => m.UserDashboardComponent)
+          },
+          { 
+            path: 'profile',
+            loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent)
+          },
+          { 
+            path: 'reservations',
+            loadComponent: () => import('./components/reservations/reservations.component').then(m => m.ReservationsComponent)
+          },
+          { 
+            path: 'abonnements',
+            loadComponent: () => import('./components/abonnement/abonnement.component').then(m => m.AbonnementComponent)
+          },
+          { path: '**', redirectTo: '' }
         ]
       },
-      // Routes Utilisateur
-      {
-        path: 'user-dashboard',
-        loadComponent: () => import('./components/user-dashboard/user-dashboard.component').then(m => m.DashboardComponent),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'profile',
-        loadComponent: () => import('./components/user-dashboard/profile/profile.component').then(m => m.ProfileComponent),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'reservations',
-        loadComponent: () => import('./components/user-dashboard/reservations/reservations.component').then(m => m.ReservationsComponent),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'abonnement',
-        loadComponent: () => import('./components/user-dashboard/abonnement/abonnement.component').then(m => m.AbonnementComponent),
-        canActivate: [AuthGuard]
-      }
+      { path: '**', redirectTo: 'user/dashboard' }
     ]
   },
-  {
-    path: '**',
-    redirectTo: 'auth'
-  }
+  { path: '**', redirectTo: 'auth' }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(appRoutes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

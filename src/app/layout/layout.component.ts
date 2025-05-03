@@ -1,31 +1,22 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { AuthService } from '../auth/services/auth/auth.service';
-
+import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatToolbarModule,
-    MatButtonModule
-  ],
-  templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss']
+  imports: [NavbarComponent, RouterOutlet],
+  template: `
+    <app-navbar></app-navbar>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  `,
+  styles: [`
+    .content { 
+      padding-top: 80px;
+      min-height: 100vh;
+    }
+  `]
 })
-export class LayoutComponent {
-  constructor(private authService: AuthService) {}
-
-  isAdmin(): boolean {
-    return this.authService.isAdmin();
-  }
-
-  logout(): void {
-    this.authService.logout();
-  }
-}
+export class LayoutComponent {}

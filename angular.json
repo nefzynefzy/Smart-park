@@ -6,54 +6,43 @@
     "smart-parking-app": {
       "projectType": "application",
       "schematics": {},
-      "root": "",
+      "root": "./",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/smart-parking-app",
             "index": "src/index.html",
-            "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "main": "src/main.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "node_modules/remixicon/fonts",
               {
                 "glob": "**/*",
-                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
-                "output": "/assets/"
+                "input": "src/assets/fonts/remixicon",
+                "output": "/assets/fonts/remixicon/"
               }
             ],
             "styles": [
-              "src/custom-theme.scss",
-              "src/theme.less",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              {
+                "input": "node_modules/mapbox-gl/dist/mapbox-gl.css",
+                "inject": false
+              },
               "src/styles.css",
+              "src/style.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/mapbox-gl/dist/mapbox-gl.css",
-
-              "node_modules/remixicon/fonts/remixicon.css",
-              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
-              "src/styles.scss",
-              "src/theme.scss",
+              "src/assets/fonts/remixicon/remixicon.css",
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css"
-            ]
-
-
-
-              
-            ,
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/style","src/styles"]
+            },
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -100,18 +89,10 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.css","src/style.scss"],
             "scripts": []
           }
         }

@@ -1,21 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';;
-import { ReservationService } from '../../services/Reservations/reservation.service';  // Service pour les réservations
+import { UserService } from '../../services/user.service';
+import { ReservationService } from '../../services/Reservations/reservation.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,  // Composant autonome
+  selector: 'app-user-dashboard',
+  standalone: true,
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css'],
-  imports: [ReactiveFormsModule] // Assurer que ReactiveFormsModule est importé
-  // Assurer que ReactiveFormsModule est importé
+  imports: [ReactiveFormsModule, RouterOutlet, RouterLink]
 })
-export class DashboardComponent implements OnInit {
+export class UserDashboardComponent implements OnInit { // Nom corrigé
   profileForm!: FormGroup;
-  reservations: any[] = [];  // Liste des réservations de l'utilisateur
-  userId = 1;  // Remplace avec l'ID de l'utilisateur connecté
+  reservations: any[] = [];
+  userId = 1;
 
   constructor(
     private userService: UserService,

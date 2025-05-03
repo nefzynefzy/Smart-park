@@ -1,32 +1,28 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
-import { appRoutes } from './app/app.routes';
+import { provideRouter, RouterModule } from '@angular/router';
+import { routes } from './app/app.routes';
 import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { importProvidersFrom } from '@angular/core';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { ApplicationConfig } from '@angular/core';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { provideNzIcons } from './icons-provider';
+import { MatNativeDateModule } from '@angular/material/core';
+
+// Enregistre la locale pour ng-zorro
+registerLocaleData(en);
+
+// Appel unique à bootstrapApplication avec tous les providers fusionnés
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter(appRoutes),
+    provideRouter(routes),
+    
+    provideNzI18n(en_US),
+    importProvidersFrom(FormsModule),
     provideAnimations(),
     provideHttpClient(),
-    provideNativeDateAdapter(), provideNzIcons(),
-    // Autres providers...
-  ],
-}).catch((err) => console.error(err));
-
-registerLocaleData(en); // Importation des routes
-
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideRouter(appRoutes), provideNzI18n(en_US), importProvidersFrom(FormsModule), provideAnimationsAsync(), provideHttpClient(), provideAnimationsAsync() // Fournir le routage ici
+    importProvidersFrom(MatNativeDateModule),
   ]
-});
+}).catch((err) => console.error(err));

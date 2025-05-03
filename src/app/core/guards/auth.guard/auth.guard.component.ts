@@ -1,31 +1,29 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { AuthService } from '../../../auth/services/auth/auth.service';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/services/auth/auth.service';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    // Vérifier si l'utilisateur est authentifié
-    if (!this.authService.isAuthenticated()) {
-      this.router.navigate(['/auth']);
+    // Vérification synchrone renforcée
+    const isAuth = this.authService.isAuthenticated();
+    const user = this.authService.getUser();
+    
+    if (!isAuth || !user) {
+      this.router.navigate(['/auth'], { 
+        queryParams: { returnUrl: this.router.url }
+      });
       return false;
     }
-
-    // Vérifier le rôle pour les routes protégées
-    const isAdminRoute = route.routeConfig?.path?.includes('admin-dashboard');
-    const isAdmin = this.authService.isAdmin();
-
-    if (isAdminRoute && !isAdmin) {
-      // Si la route est admin et que l'utilisateur n'est pas admin, rediriger vers user-dashboard
-      this.router.navigate(['/user-dashboard']);
+  
+    const requiredRole = route.data['role'];
+    if (requiredRole && user.role !== requiredRole) {
+      this.router.navigate(['/access-denied']);
       return false;
     }
-
+  
     return true;
-  }
-}
+  }}

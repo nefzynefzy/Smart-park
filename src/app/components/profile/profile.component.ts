@@ -1,12 +1,18 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'; // Import direct des directives
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule,
+     FormsModule, 
+     RouterModule
+   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })

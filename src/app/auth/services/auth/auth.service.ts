@@ -1,58 +1,109 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { Observable, tap } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
-@Injectable({
-  providedIn: 'root'
-})
+interface AuthResponse {
+  message: any;
+  token: string;
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  roles: string[];
+  
+}
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiUrl = 'http://localhost:8082/parking/api/auth';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
-  // Connexion
-  login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/signin`, credentials).pipe(
-      tap((response: any) => {
-        // Stocker le token et les données utilisateur
-        if (response.token) {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify({
-            id: response.id,
-            email: response.email,
-            role: response.role // Supposons que l'API retourne un champ 'role' (par exemple, 'ADMIN' ou 'USER')
-          }));
-        }
+  login(credentials: { email: string; password: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/signin`, credentials).pipe(
+      tap({
+        next: (response) => {
+          console.log('Réponse reçue:', response);
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('user', JSON.stringify({
+              id: response.id,
+              role: response.roles.includes('ROLE_ADMIN') ? 'ADMIN' : 'USER'
+            }));
+            
+            // Forcer le rechargement de l'état d'authentification
+            setTimeout(() => {
+              this.redirectBasedOnRole(response.roles);
+            }, 100);
+          }
+        },
+        error: (err) => console.error('Erreur de connexion:', err)
       })
     );
   }
 
-  // Inscription
-  register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/signup`, userData);
+  private handleLoginSuccess(response: AuthResponse): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify({
+        id: response.id,
+        firstName: response.firstName,
+        lastName: response.lastName,
+        email: response.email,
+        phone: response.phone,
+        role: this.getUserRole(response.roles)
+      }));
+      this.redirectBasedOnRole(response.roles);
+    }
   }
 
-  // Déconnexion
+  private getUserRole(roles: string[]): string {
+    return roles.includes('ROLE_ADMIN') ? 'ADMIN' : 'USER';
+  }
+
+  private redirectBasedOnRole(roles: string[]): void {
+    const redirectPath = roles.includes('ROLE_ADMIN') 
+      ? '/app/admin/dashboard' 
+      : '/app/user/dashboard';
+    
+    this.router.navigateByUrl(redirectPath, { replaceUrl: true })
+      .then(success => {
+        if (!success) {
+          console.error('Échec de la navigation vers:', redirectPath);
+          window.location.href = redirectPath; // Solution de secours
+        }
+      });
+  }
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.clear();
+    }
     this.router.navigate(['/auth']);
   }
 
-  // Vérifier si l'utilisateur est authentifié
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return isPlatformBrowser(this.platformId)
+      ? !!localStorage.getItem('token') 
+      : false;
   }
 
-  // Vérifier si l'utilisateur est un administrateur
   isAdmin(): boolean {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user.role === 'ADMIN'; // Ajustez selon le format de votre API (par exemple, 'admin', 'ADMIN', etc.)
+    return this.getUser().role === 'ADMIN';
   }
 
-  // Obtenir les données de l'utilisateur
   getUser(): any {
-    return JSON.parse(localStorage.getItem('user') || '{}');
+    if (!isPlatformBrowser(this.platformId)) return {};
+    const userData = localStorage.getItem('user') || '{}';
+    return JSON.parse(userData);
+  }
+  register(userData: any): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, userData);
   }
 }
