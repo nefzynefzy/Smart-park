@@ -8,13 +8,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:smart_parking/main.dart';
-import 'package:smart_parking/screens/home_screen.dart';
+import 'package:smart_parking/views/home/home_page.dart';
+
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const HomeScreen());
+    await tester.pumpWidget(HomePage());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
