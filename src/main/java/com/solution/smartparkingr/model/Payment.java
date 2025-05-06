@@ -11,9 +11,13 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "reservation_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id")
     private Reservation reservation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscription_id")
+    private Subscription subscription;
 
     @Column(nullable = false)
     private Double amount;
@@ -33,6 +37,14 @@ public class Payment {
 
     public Payment() {}
 
+    public Payment(Double amount, PaymentMethod paymentMethod, String paymentStatus, String transactionId, LocalDateTime paymentDate) {
+        this.amount = amount;
+        this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
+        this.transactionId = transactionId;
+        this.paymentDate = paymentDate;
+    }
+
     public Payment(Reservation reservation, Double amount, PaymentMethod paymentMethod, String paymentStatus, String transactionId, LocalDateTime paymentDate) {
         this.reservation = reservation;
         this.amount = amount;
@@ -42,12 +54,15 @@ public class Payment {
         this.paymentDate = paymentDate;
     }
 
-    // Getters and setters
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
     public Reservation getReservation() { return reservation; }
     public void setReservation(Reservation reservation) { this.reservation = reservation; }
+
+    public Subscription getSubscription() { return subscription; }
+    public void setSubscription(Subscription subscription) { this.subscription = subscription; }
 
     public Double getAmount() { return amount; }
     public void setAmount(Double amount) { this.amount = amount; }

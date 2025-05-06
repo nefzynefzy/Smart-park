@@ -1,11 +1,13 @@
 package com.solution.smartparkingr.controller;
 
 import com.solution.smartparkingr.model.Payment;
-import com.solution.smartparkingr.model.PaymentMethod;
 import com.solution.smartparkingr.model.Reservation;
 import com.solution.smartparkingr.model.ReservationStatus;
+import com.solution.smartparkingr.model.Subscription;
+import com.solution.smartparkingr.model.SubscriptionStatus;
 import com.solution.smartparkingr.repository.PaymentRepository;
 import com.solution.smartparkingr.repository.ReservationRepository;
+import com.solution.smartparkingr.repository.SubscriptionRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,44 +28,58 @@ public class PaymentController {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    @GetMapping("/callback")
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+
+    @PostMapping("/callback")
     @Operation(summary = "Handle payment callback", description = "Handles status update after payment (SUCCESS or FAILED)")
     public ResponseEntity<?> handlePaymentCallback(
             @RequestParam @Parameter(description = "Transaction session ID") String session,
             @RequestParam @Parameter(description = "Status from gateway: SUCCESS or FAILED") String status
     ) {
         Payment payment = paymentRepository.findByTransactionId(session)
-                .orElse(null);
+                .orElseThrow(() -> new IllegalArgumentException("Paiement introuvable pour la session : " + session));
 
-        if (payment == null) {
-            return ResponseEntity.badRequest().body("Paiement introuvable pour la session : " + session);
-        }
-
-        Reservation reservation = payment.getReservation();
-        if (reservation == null) {
-            return ResponseEntity.badRequest().body("Réservation associée introuvable.");
-        }
-
-        if ("SUCCESS".equalsIgnoreCase(status)) {
-            payment.setPaymentStatus("COMPLETED");
-            reservation.setStatus(ReservationStatus.CONFIRMED);
-        } else {
-            payment.setPaymentStatus("FAILED");
-            reservation.setStatus(ReservationStatus.CANCELLED);
-
-            // Libérer la place de parking si elle était associée
-            if (reservation.getParkingSpot() != null) {
-                reservation.getParkingSpot().setAvailable(true);
-                reservation.getParkingSpot().setVehicle(null);
+        if (payment.getReservation() != null) {
+            // Handle reservation payment
+            Reservation reservation = payment.getReservation();
+            if (reservation == null) {
+                return ResponseEntity.badRequest().body("Réservation associée introuvable.");
             }
+
+            if ("SUCCESS".equalsIgnoreCase(status)) {
+                payment.setPaymentStatus("COMPLETED");
+                reservation.setStatus(ReservationStatus.CONFIRMED);
+            } else {
+                payment.setPaymentStatus("FAILED");
+                reservation.setStatus(ReservationStatus.CANCELLED);
+
+                if (reservation.getParkingSpot() != null) {
+                    reservation.getParkingSpot().setAvailable(true);
+                    reservation.getParkingSpot().setVehicle(null);
+                }
+            }
+            reservationRepository.save(reservation);
+        } else if (payment.getSubscription() != null) {
+            // Handle subscription payment
+            Subscription subscription = payment.getSubscription();
+            if ("SUCCESS".equalsIgnoreCase(status)) {
+                payment.setPaymentStatus("COMPLETED");
+                subscription.setPaymentStatus("COMPLETED");
+                subscription.setStatus(SubscriptionStatus.ACTIVE);
+            } else {
+                payment.setPaymentStatus("FAILED");
+                subscription.setPaymentStatus("FAILED");
+                subscription.setStatus(SubscriptionStatus.CANCELLED);
+            }
+            subscriptionRepository.save(subscription);
+        } else {
+            return ResponseEntity.badRequest().body("Aucune réservation ou abonnement associé trouvé.");
         }
 
         payment.setPaymentDate(LocalDateTime.now());
-
         paymentRepository.save(payment);
-        reservationRepository.save(reservation);
 
         return ResponseEntity.ok("Statut de paiement mis à jour : " + status);
     }
-
 }

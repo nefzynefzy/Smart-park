@@ -69,8 +69,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/user/reservations").permitAll()
-                        .requestMatchers("/api/user/update").permitAll()
-                        .requestMatchers("/api/createReservation").permitAll()
+                        .requestMatchers("/api/user/profile").authenticated() // Require authentication
+                        .requestMatchers("/api/parking-spots/available").authenticated()
+                        .requestMatchers("/api/createReservation").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -90,9 +91,9 @@ public class WebSecurityConfig {
                             authentication.getAuthorities().forEach(authority -> {
                                 try {
                                     if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                                        response.sendRedirect("/admin/dashboard"); // Redirect admin
+                                        response.sendRedirect("/admin/dashboard");
                                     } else {
-                                        response.sendRedirect("/user/dashboard"); // Redirect user
+                                        response.sendRedirect("/user/dashboard");
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -103,11 +104,10 @@ public class WebSecurityConfig {
                 .build();
     }
 
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Modifier selon votre frontend
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

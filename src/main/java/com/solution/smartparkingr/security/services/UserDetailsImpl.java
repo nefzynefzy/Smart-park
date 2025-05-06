@@ -1,7 +1,10 @@
 package com.solution.smartparkingr.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.solution.smartparkingr.model.Role;
 import com.solution.smartparkingr.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +15,11 @@ import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsImpl.class);
+
     private long id;
     private String username;  // Use this field for email (username = email)
-    private String email;     // Store email separately from username
+    private String email;     // Store email separately (optional, for clarity)
     private String firstName; // Added first name
     private String lastName;  // Added last name
     private String phone;     // Added phone number
@@ -40,19 +45,23 @@ public class UserDetailsImpl implements UserDetails {
 
     // Static build method to construct UserDetailsImpl from User
     public static UserDetailsImpl build(User user) {
-        // Map roles to granted authorities
+        logger.debug("Building UserDetails for user with email: {}", user.getEmail());
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name())) // Assuming Role has 'name'
+                .map(role -> {
+                    logger.debug("Mapping role: {}", role.getName());
+                    return new SimpleGrantedAuthority(role.getName().name());
+                })
                 .collect(Collectors.toList());
+        logger.debug("Authorities mapped: {}", authorities);
 
         return new UserDetailsImpl(
                 user.getId(),
                 user.getEmail(),  // Use email as the username
                 user.getEmail(),  // Store email separately
                 user.getPassword(),
-                user.getFirstName(),  // Use first name from User
-                user.getLastName(),   // Use last name from User
-                user.getPhone(),      // Use phone from User
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhone(),
                 authorities
         );
     }
@@ -73,19 +82,19 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public String getEmail() {
-        return email;  // You can use this to get the user's email
+        return email;  // Getter for email
     }
 
     public String getFirstName() {
-        return firstName; // Added getter for firstName
+        return firstName; // Getter for firstName
     }
 
     public String getLastName() {
-        return lastName;  // Added getter for lastName
+        return lastName;  // Getter for lastName
     }
 
     public String getPhone() {
-        return phone;     // Added getter for phone
+        return phone;     // Getter for phone
     }
 
     @Override
@@ -108,7 +117,6 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
-    // Getter for id
     public long getId() {
         return id;
     }

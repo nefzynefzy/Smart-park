@@ -1,16 +1,18 @@
 package com.solution.smartparkingr.load.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class SubscriptionRequest {
+
+    @NotNull
     private Long userId;
-    private String type;
 
-    // Constructors
-    public SubscriptionRequest() {}
+    @NotBlank
+    private String subscriptionType;
 
-    public SubscriptionRequest(Long userId, String type) {
-        this.userId = userId;
-        this.type = type;
-    }
+    @NotBlank
+    private String billingCycle;
 
     // Getters and Setters
     public Long getUserId() {
@@ -21,11 +23,19 @@ public class SubscriptionRequest {
         this.userId = userId;
     }
 
-    public String getType() {
-        return type;
+    public String getSubscriptionType() {
+        return subscriptionType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setSubscriptionType(String subscriptionType) {
+        this.subscriptionType = subscriptionType;
+    }
+
+    public String getBillingCycle() {
+        return billingCycle;
+    }
+
+    public void setBillingCycle(String billingCycle) {
+        this.billingCycle = billingCycle;
     }
 }

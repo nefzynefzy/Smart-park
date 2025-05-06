@@ -1,28 +1,30 @@
 package com.solution.smartparkingr.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 
 @Entity
+@Table(name = "parking_spots")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ParkingSpot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String code;
+    @Column(nullable = false)
+    private String name;
 
+    @Column(nullable = false)
+    private String type; // standard or premium
 
-    private boolean isAvailable = true;
+    @Column(nullable = false)
+    private double price; // Price per hour
 
-    @OneToOne
+    @Column(nullable = false)
+    private boolean available;
+
+    @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 }

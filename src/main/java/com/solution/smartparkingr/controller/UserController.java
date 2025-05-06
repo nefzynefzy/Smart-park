@@ -1,114 +1,153 @@
 package com.solution.smartparkingr.controller;
 
+import com.solution.smartparkingr.load.request.ChangePasswordRequest;
+import com.solution.smartparkingr.load.request.UserProfileUpdateRequest;
 import com.solution.smartparkingr.load.response.UserProfileResponse;
-import com.solution.smartparkingr.load.response.UserProfileUpdateResponse;
-import com.solution.smartparkingr.model.Reservation;
 import com.solution.smartparkingr.model.User;
-import com.solution.smartparkingr.model.Vehicle;
-import com.solution.smartparkingr.repository.ReservationRepository;
-import com.solution.smartparkingr.repository.UserRepository;
-import com.solution.smartparkingr.repository.VehicleRepository;
-import com.solution.smartparkingr.security.services.UserDetailsImpl;
-import com.solution.smartparkingr.load.response.MessageResponse;
-import com.solution.smartparkingr.load.request.ProfileUpdateRequest;
+import com.solution.smartparkingr.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
-    private final UserRepository userRepository;
     @Autowired
-    private VehicleRepository vehicleRepository;
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    /**
-     * 🔹 Récupérer les informations de l'utilisateur connecté
-     */
     @GetMapping("/profile")
-    public ResponseEntity<?> getUserProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Utilisateur non connecté");
-        }
+    public ResponseEntity<UserProfileResponse> getUserProfile() {
+        User user = userService.getCurrentUserForProfile();
 
-        User user = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+        List<UserProfileResponse.VehicleInfo> vehicleInfos = user.getVehicles() != null
+                ? user.getVehicles().stream()
+                .map(vehicle -> new UserProfileResponse.VehicleInfo(
+                        vehicle.getId(),
+                        vehicle.getMatricule(),
+                        vehicle.getVehicleType(),
+                        vehicle.getBrand(),
+                        vehicle.getModel(),
+                        vehicle.getColor(),
+                        vehicle.getMatriculeImageUrl()
+                ))
+                .collect(Collectors.toList())
+                : List.of();
 
-        return ResponseEntity.ok(user); // You might want to return a UserProfileResponse object here
-    }
+        List<UserProfileResponse.ReservationInfo> reservationInfos = user.getReservations() != null
+                ? user.getReservations().stream()
+                .map(res -> new UserProfileResponse.ReservationInfo(
+                        res.getParkingSpot().getId(),
+                        res.getVehicle() != null ? res.getVehicle().getId() : null,
+                        res.getStartTime(),
+                        res.getEndTime(),
+                        res.getStatus().name(),
+                        res.getTotalCost(),
+                        res.getCreatedAt()
+                ))
+                .collect(Collectors.toList())
+                : List.of();
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                           @RequestBody ProfileUpdateRequest updateRequest) {
-        // Step 1: Fetch user from DB
-        User user = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Step 2: Update user information
-        user.setFirstName(updateRequest.getFirstName());
-        user.setLastName(updateRequest.getLastName());
-        user.setEmail(updateRequest.getEmail());
-        user.setPhone(updateRequest.getPhone());
-
-        // Step 3: Update password if provided
-        if (updateRequest.getPassword() != null && !updateRequest.getPassword().isEmpty()) {
-            if (!passwordEncoder.matches(updateRequest.getOldPassword(), user.getPassword())) {
-                return ResponseEntity.badRequest().body("Old password is incorrect");
-            }
-            user.setPassword(passwordEncoder.encode(updateRequest.getPassword()));
-        }
-
-        // Step 4: Update vehicle information (matricule)
-        if (updateRequest.getMatricule() != null && !updateRequest.getMatricule().isEmpty()) {
-            Vehicle vehicle = vehicleRepository.findByUser(user)
-                    .orElseThrow(() -> new RuntimeException("Vehicle not found"));
-            vehicle.setMatricule(updateRequest.getMatricule());
-
-            // Step 5: Upload image to cloud storage (if provided)
-            if (updateRequest.getMatriculeImageUrl() != null && !updateRequest.getMatriculeImageUrl().isEmpty()) {
-                String imageUrl = uploadImageToCloud(updateRequest.getMatriculeImageUrl());
-                vehicle.setMatriculeImageUrl(imageUrl);  // Save only the URL, not the image itself
-            }
-
-            vehicleRepository.save(vehicle);
-        }
-
-        // Step 6: Save the updated user profile
-        userRepository.save(user);
-
-        // Return updated profile in response
-        UserProfileUpdateResponse response = new UserProfileUpdateResponse(
+        UserProfileResponse response = new UserProfileResponse(
+                user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
                 user.getPhone(),
-                user.isActive(),  // Assuming there is an 'active' field in the User model
-                updateRequest.getMatricule(),
-                updateRequest.getMatriculeImageUrl()  // You might want to return the updated image URL as well
+                vehicleInfos,
+                null,
+                reservationInfos
         );
 
         return ResponseEntity.ok(response);
     }
 
-    private String uploadImageToCloud(String imageUrl) {
-        // Implement image upload to cloud storage (Firebase, S3, etc.)
-        // Return the URL of the uploaded image.
-        return "https://cloudstorage.com/path/to/image.jpg";  // Example URL
+    @PutMapping("/profile")
+    public ResponseEntity<UserProfileResponse> updateUserProfile(@Valid @RequestBody UserProfileUpdateRequest updateRequest) {
+        User user = userService.updateUserProfile(updateRequest);
+
+        List<UserProfileResponse.VehicleInfo> vehicleInfos = user.getVehicles() != null
+                ? user.getVehicles().stream()
+                .map(vehicle -> new UserProfileResponse.VehicleInfo(
+                        vehicle.getId(),
+                        vehicle.getMatricule(),
+                        vehicle.getVehicleType(),
+                        vehicle.getBrand(),
+                        vehicle.getModel(),
+                        vehicle.getColor(),
+                        vehicle.getMatriculeImageUrl()
+                ))
+                .collect(Collectors.toList())
+                : List.of();
+
+        List<UserProfileResponse.ReservationInfo> reservationInfos = user.getReservations() != null
+                ? user.getReservations().stream()
+                .map(res -> new UserProfileResponse.ReservationInfo(
+                        res.getParkingSpot().getId(),
+                        res.getVehicle() != null ? res.getVehicle().getId() : null,
+                        res.getStartTime(),
+                        res.getEndTime(),
+                        res.getStatus().name(),
+                        res.getTotalCost(),
+                        res.getCreatedAt()
+                ))
+                .collect(Collectors.toList())
+                : List.of();
+
+        UserProfileResponse response = new UserProfileResponse(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhone(),
+                vehicleInfos,
+                null,
+                reservationInfos
+        );
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
+        userService.changePassword(request.getCurrentPassword(), request.getNewPassword());
+        return ResponseEntity.ok("Password updated successfully");
+    }
+
+    @PostMapping("/cancel-reservation/{id}")
+    public ResponseEntity<String> cancelReservation(@PathVariable Long id) {
+        userService.cancelReservation(id);
+        return ResponseEntity.ok("Reservation cancelled successfully");
+    }
+
+    @PutMapping("/update-reservation/{id}")
+    public ResponseEntity<String> updateReservation(@PathVariable Long id,
+                                                    @RequestParam LocalDateTime newStartTime,
+                                                    @RequestParam LocalDateTime newEndTime) {
+        userService.updateReservation(id, newStartTime, newEndTime);
+        return ResponseEntity.ok("Reservation updated successfully");
+    }
+
+    @PostMapping("/cancel-subscription/{id}")
+    public ResponseEntity<String> cancelSubscription(@PathVariable Long id) {
+        userService.cancelSubscription(id);
+        return ResponseEntity.ok("Subscription cancelled successfully");
+    }
+
+    @PutMapping("/update-vehicle/{id}")
+    public ResponseEntity<String> updateVehicleInfo(@PathVariable Long id,
+                                                    @RequestParam(required = false) String matricule,
+                                                    @RequestParam(required = false) String vehicleType,
+                                                    @RequestParam(required = false) String brand,
+                                                    @RequestParam(required = false) String model,
+                                                    @RequestParam(required = false) String color,
+                                                    @RequestParam(required = false) String matriculeImageUrl) {
+        userService.updateVehicleInfo(id, matricule, vehicleType, brand, model, color, matriculeImageUrl);
+        return ResponseEntity.ok("Vehicle information updated successfully");
     }
 }

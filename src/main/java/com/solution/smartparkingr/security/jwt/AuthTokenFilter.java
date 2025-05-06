@@ -1,7 +1,10 @@
 package com.solution.smartparkingr.security.jwt;
 
-import com.solution.smartparkingr.security.services.UserDetailsImpl;
 import com.solution.smartparkingr.security.services.UserDetailsServiceImpl;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,57 +13,50 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
-    JwtUtils jwtUtils;
-
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
-
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
-            logger.info("Authorization Header: {}", request.getHeader("Authorization"));
-            logger.info("Parsed JWT: {}", jwt);
-
+            logger.debug("Parsed JWT from request: {}", jwt);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String email = jwtUtils.getUserNameFromJwtToken(jwt);
-                logger.info("JWT validated successfully. Email from token: {}", email);
-
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+                logger.debug("Extracted username from JWT: {}", username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                logger.debug("Loaded user details for username: {}", username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null, userDetails.getAuthorities());
-
+                        userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                logger.debug("Set authentication in SecurityContextHolder for user: {}", username);
+            } else {
+                logger.debug("JWT validation failed or no JWT provided");
             }
-
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            logger.error("Cannot set user authentication: {}", e.getMessage(), e);
         }
-
         filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer "))
-        {
+        logger.debug("Authorization header: {}", headerAuth);
+        if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
             return headerAuth.substring(7);
         }
         return null;

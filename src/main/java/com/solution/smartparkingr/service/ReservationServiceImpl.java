@@ -6,6 +6,7 @@ import com.solution.smartparkingr.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation save(Reservation reservation) {
-        // Logique pour sauvegarder une réservation
         return reservationRepository.save(reservation);
     }
 
@@ -40,20 +40,14 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.deleteById(id);
     }
 
-    // Méthodes personnalisées
     @Override
     public List<Reservation> findByUserId(Long userId) {
         return reservationRepository.findByUserId(userId);
     }
 
     @Override
-    public List<Reservation> findByParkingPlaceId(Long parkingPlaceId) {
-        return List.of();
-    }
-
-    @Override
-    public List<Reservation> findByParkingSpotId(Long parkingSpotId) {  // Modifier ici
-        return reservationRepository.findByParkingSpot_Id(parkingSpotId);  // Modification ici
+    public List<Reservation> findByParkingSpotId(Long parkingSpotId) {
+        return reservationRepository.findByParkingSpot_Id(parkingSpotId);
     }
 
     @Override
@@ -65,8 +59,15 @@ public class ReservationServiceImpl implements ReservationService {
     public void cancelReservation(Long reservationId) {
         Optional<Reservation> reservation = reservationRepository.findById(reservationId);
         reservation.ifPresent(r -> {
-            r.setStatus(ReservationStatus.CANCELLED);  // Changer le statut de la réservation
+            r.setStatus(ReservationStatus.CANCELLED);
             reservationRepository.save(r);
         });
+    }
+
+    @Override
+    public boolean isSpotReserved(Long parkingSpotId, LocalDateTime startTime, LocalDateTime endTime) {
+        List<Reservation> conflictingReservations = reservationRepository.findByParkingSpotIdAndTimeOverlap(
+                parkingSpotId, startTime, endTime);
+        return !conflictingReservations.isEmpty();
     }
 }

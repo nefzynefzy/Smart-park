@@ -12,17 +12,19 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner initParkingSpots(ParkingSpotRepository repository) {
         return args -> {
-            // Vérifie si la place "P1" existe déjà avant de créer les 50 places
-            if (!repository.existsByCode("P1")) {
+            // Check if the spot "P1" exists to avoid duplicating data
+            if (!repository.existsByName("P1")) {
                 for (int i = 1; i <= 50; i++) {
                     ParkingSpot spot = new ParkingSpot();
-                    spot.setCode("P" + i);
+                    spot.setName("P" + i);
+                    spot.setType("standard");
+                    spot.setPrice(5.0);
                     spot.setAvailable(true);
                     repository.save(spot);
                 }
-                System.out.println("✅ 50 places de parking initialisées !");
+                System.out.println("✅ 50 parking spots initialized!");
             } else {
-                System.out.println("🚗 Les places de parking existent déjà !");
+                System.out.println("🚗 Parking spots already exist!");
             }
         };
     }

@@ -1,13 +1,16 @@
 package com.solution.smartparkingr.service;
 
+import com.solution.smartparkingr.load.request.VehicleRequest;
+import com.solution.smartparkingr.load.response.VehicleResponse;
 import com.solution.smartparkingr.model.Vehicle;
+
 import java.util.List;
 
 public interface VehicleService {
 
-    List<Vehicle> getAllVehicles();
+    List<VehicleResponse> getAllVehicles();
 
-    Vehicle createVehicle(Vehicle vehicle);
+    VehicleResponse createVehicle(VehicleRequest vehicleRequest);
 
     Vehicle findByMatricule(String matricule);
 

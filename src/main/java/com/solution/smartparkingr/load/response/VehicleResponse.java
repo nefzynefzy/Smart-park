@@ -1,49 +1,28 @@
-package com.solution.smartparkingr.model;
+package com.solution.smartparkingr.load.response;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+public class VehicleResponse {
 
-@Entity
-@Table(name = "vehicles")
-public class Vehicle {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "matricule")
     private String matricule;
-
-    @Column(name = "vehicle_type")
     private String vehicleType;
-
-    @Column(name = "brand")
     private String brand;
-
-    @Column(name = "model")
     private String model;
-
-    @Column(name = "color")
     private String color;
-
-    @Column(name = "matricule_image_url")
     private String matriculeImageUrl;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
-    private User user;
+    private Long userId;
 
     // Constructors
-    public Vehicle() {}
+    public VehicleResponse() {}
 
-    public Vehicle(String matricule, String vehicleType, String brand, String model, String color, String matriculeImageUrl) {
+    public VehicleResponse(Long id, String matricule, String vehicleType, String brand, String model, String color, String matriculeImageUrl, Long userId) {
+        this.id = id;
         this.matricule = matricule;
         this.vehicleType = vehicleType;
         this.brand = brand;
         this.model = model;
         this.color = color;
         this.matriculeImageUrl = matriculeImageUrl;
+        this.userId = userId;
     }
 
     // Getters and Setters
@@ -103,11 +82,11 @@ public class Vehicle {
         this.matriculeImageUrl = matriculeImageUrl;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

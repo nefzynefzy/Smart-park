@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 import java.time.LocalDateTime;
 
 @Data
@@ -22,6 +21,7 @@ public class ReservationRequest {
     private Long parkingPlaceId;
 
     @NotBlank(message = "Matricule is required")
+    @Pattern(regexp = "[A-Z0-9]{3,10}", message = "Invalid matricule format")
     private String matricule;
 
     @NotNull(message = "Start time is required")
@@ -32,7 +32,19 @@ public class ReservationRequest {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endTime;
 
+    @NotBlank(message = "Vehicle type is required")
+    private String vehicleType;
 
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    private String email;
 
+    @NotBlank(message = "Phone is required")
+    @Pattern(regexp = "[0-9]{8}", message = "Phone must be 8 digits")
+    private String phone;
 
+    @NotNull(message = "Payment method is required")
+    private PaymentMethod paymentMethod;
+
+    private String specialRequest;
 }

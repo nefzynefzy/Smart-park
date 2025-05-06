@@ -8,7 +8,10 @@ import java.util.Optional;
 public interface PaymentService {
 
     Payment save(Payment payment);
+
     Optional<Payment> findById(Long id);
+
     List<Payment> findAll();
+
     void deleteById(Long id);
 }

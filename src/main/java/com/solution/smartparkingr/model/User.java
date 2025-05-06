@@ -1,11 +1,13 @@
-
 package com.solution.smartparkingr.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
 import java.util.List;
@@ -45,26 +47,29 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-
-    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    //private List<Subscription> subscriptions;
-
     private Set<Role> roles = new HashSet<>();
-    // boolean emailVerified;
-    //private String verificationToken;
 
-    private boolean active = true; // Enables account activation/deactivation
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
+    @JsonManagedReference
+    private List<Subscription> subscriptions;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Vehicle> vehicles;
-    @OneToMany(mappedBy = "user")
+    private boolean active = true;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
+    @JsonManagedReference
+    private Set<Vehicle> vehicles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
+    @JsonManagedReference
     private List<Reservation> reservations;
-
 
     public User() {
     }
@@ -132,11 +137,36 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public Set<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(Set<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }

@@ -2,6 +2,8 @@ package com.solution.smartparkingr.security.services;
 
 import com.solution.smartparkingr.model.User;
 import com.solution.smartparkingr.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,19 +12,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+
     private final UserRepository userRepository;
 
-    // Constructor injection of UserRepository
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Find the user by email
-        User user = userRepository.findByEmail(email)
+        logger.debug("Loading user by username (email): {}", email);
+        User user = userRepository.findByEmailWithRoles(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-
-        return UserDetailsImpl.build(user);  // Return a UserDetailsImpl object built from the found user
+        logger.debug("User loaded successfully for email: {}", email);
+        return UserDetailsImpl.build(user);
     }
 }

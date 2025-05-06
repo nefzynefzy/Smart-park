@@ -1,7 +1,9 @@
 package com.solution.smartparkingr.service;
 
 import com.solution.smartparkingr.model.Reservation;
+import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,12 +13,12 @@ public interface ReservationService {
     List<Reservation> findAll();
     void deleteById(Long id);
 
-    // Méthodes personnalisées
+    // Custom methods
     List<Reservation> findByUserId(Long userId);
-    List<Reservation> findByParkingPlaceId(Long parkingPlaceId);
-
     List<Reservation> findByParkingSpotId(Long parkingSpotId);
-
     List<Reservation> findActiveReservations();
     void cancelReservation(Long reservationId);
+
+    boolean isSpotReserved(Long parkingSpotId, @NotNull(message = "Start time is required") LocalDateTime startTime,
+                           @NotNull(message = "End time is required") LocalDateTime endTime);
 }
