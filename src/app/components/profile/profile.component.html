@@ -2,23 +2,6 @@
   <!-- Profile Header -->
   <div class="bg-white rounded-lg p-8 mb-8 shadow-lg">
     <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
-      <div class="flex flex-col items-center">
-        <div class="w-32 h-32 rounded-full bg-gray-100 overflow-hidden border-4 border-primary">
-          <img
-            src="https://readdy.ai/api/search-image?query=professional%20portrait%20of%20a%20French%20person%2C%20neutral%20expression%2C%20business%20attire%2C%20high%20quality%2C%20studio%20lighting%2C%20professional%20headshot&width=128&height=128&seq=profile1&orientation=squarish"
-            alt="Photo de profil"
-            class="w-full h-full object-cover object-top"
-          />
-        </div>
-        <button
-          class="mt-4 bg-primary text-gray-900 font-medium px-4 py-2 rounded-button flex items-center gap-2 hover:bg-opacity-90 transition-colors whitespace-nowrap"
-        >
-          <div class="w-5 h-5 flex items-center justify-center">
-            <i class="ri-camera-line"></i>
-          </div>
-          Changer la photo
-        </button>
-      </div>
       <div class="flex-1">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
           <div>
@@ -79,12 +62,22 @@
             <form (ngSubmit)="saveChanges()">
               <div class="space-y-4">
                 <div>
+                  <label class="block text-sm text-gray-400 mb-1">Nom complet</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="user().name"
+                    name="name"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+                  />
+                </div>
+                <div>
                   <label class="block text-sm text-gray-400 mb-1">Email</label>
                   <input
                     type="email"
                     [(ngModel)]="user().email"
                     name="email"
                     class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+                    readonly
                   />
                 </div>
                 <div>
@@ -93,23 +86,6 @@
                     type="tel"
                     [(ngModel)]="user().phone"
                     name="phone"
-                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
-                  />
-                </div>
-                <div>
-                  <label class="block text-sm text-gray-400 mb-1">Adresse</label>
-                  <textarea
-                    [(ngModel)]="user().address"
-                    name="address"
-                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
-                  ></textarea>
-                </div>
-                <div>
-                  <label class="block text-sm text-gray-400 mb-1">Permis de conduire</label>
-                  <input
-                    type="text"
-                    [(ngModel)]="user().license"
-                    name="license"
                     class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
                   />
                 </div>
@@ -142,20 +118,11 @@
             </div>
             <div class="flex items-start gap-4">
               <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary">
-                <i class="ri-map-pin-line ri-lg"></i>
+                <i class="ri-vip-crown-line ri-lg"></i>
               </div>
               <div>
-                <p class="text-sm text-gray-400">Adresse</p>
-                <p class="text-gray-900">{{ user().address }}</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-primary">
-                <i class="ri-driving-license-line ri-lg"></i>
-              </div>
-              <div>
-                <p class="text-sm text-gray-400">Permis de conduire</p>
-                <p class="text-gray-900">{{ user().license }}</p>
+                <p class="text-sm text-gray-400">Abonnement</p>
+                <p class="text-gray-900">{{ user().hasSubscription ? 'Actif' : 'Aucun' }}</p>
               </div>
             </div>
             <button

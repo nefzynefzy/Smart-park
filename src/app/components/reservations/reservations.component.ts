@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,15 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { StorageService } from 'src/app/auth/services/storage/storage.service';
+import { SubscriptionService } from 'src/app/services/subscription.service';
+
+export interface ReservationResponse {
+  id: number;
+  redirect_url: string;
+}
 
 @Component({
   selector: 'app-reservations',
@@ -30,232 +39,275 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatNativeDateModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatSelectModule,
-    DatePipe
+    MatSelectModule
   ],
   templateUrl: './reservations.component.html',
   styleUrls: ['./reservations.component.css']
 })
-export class ReservationsComponent implements OnInit {
+export class ReservationComponent implements OnInit {
+  availablePlaces: any[] = [];
   reservationForm: FormGroup;
-  availablePlaces = [
-    { id: 1, name: 'A1', reserved: false, selected: false, type: 'standard', price: 5, features: ['Couvert', 'Proche ascenseur'] },
-    { id: 2, name: 'A2', reserved: false, selected: false, type: 'standard', price: 5, features: ['Couvert'] },
-    { id: 3, name: 'A3', reserved: true, selected: false, type: 'standard', price: 5, features: [] },
-    { id: 4, name: 'B1', reserved: false, selected: false, type: 'premium', price: 8, features: ['Surveillance 24/7', 'Chargeur VE'] },
-    { id: 5, name: 'B2', reserved: false, selected: false, type: 'premium', price: 8, features: ['Surveillance 24/7', 'Large'] }
-  ];
-  
-  vehicleTypes = ['Voiture', 'SUV', 'Camionnette', 'Moto'];
-  paymentMethods = ['Carte bancaire', 'PayPal', 'Espèces'];
-  
-  calculatedMontant = 0;
-  placeSelected = false;
+  hasActiveSubscription = false;
   currentStep = 1;
-  totalSteps = 3;
   selectedPlace: any = null;
+  placeSelected = false;
+  vehicleTypes = ['CAR', 'MOTORCYCLE', 'TRUCK'];
+  paymentMethods = ['CREDIT_CARD', 'MOBILE_PAYMENT', 'CASH'];
+  calculatedMontant = 0;
   isLoading = false;
+  paymentInitiated = false;
+  paymentUrl: string | null = null;
   reservationSuccess = false;
-  
-  // Gestion abonnement
-  hasSubscription = false;
-  subscriptionDetails: any = null;
-  subscriptionDiscount = 0.2;
-  allowedSubscriptionPlaces = ['A1', 'A2', 'B1'];
-  subscriptionIncludedPlaces = ['A1', 'A2'];
 
-  constructor(private snackBar: MatSnackBar) {
-    const fb = inject(FormBuilder);
-    this.reservationForm = fb.group({
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private fb: FormBuilder,
+    private storageService: StorageService,
+    private subscriptionService: SubscriptionService
+  ) {
+    this.reservationForm = this.fb.group({
       date: ['', Validators.required],
       heureDebut: ['', Validators.required],
       heureFin: ['', Validators.required],
       vehicle: ['', Validators.required],
-      vehicleType: ['Voiture', Validators.required],
+      vehicleType: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern('[0-9]{8}')]],
-      paymentMethod: ['Carte bancaire', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
+      paymentMethod: ['', Validators.required],
       specialRequest: ['']
     });
+  }
 
-    this.reservationForm.valueChanges.subscribe(() => {
-      this.calculateMontant();
+  ngOnInit(): void {
+    if (!this.storageService.isLoggedIn()) {
+      this.snackBar.open('Veuillez vous connecter pour continuer.', 'Fermer', { duration: 5000 });
+      this.router.navigate(['/auth']);
+      return;
+    }
+
+    console.log('Checking active subscription...'); // Debug
+    this.subscriptionService.getActiveSubscription(this.storageService.getUserId() || 1).subscribe({
+      next: (subscription) => {
+        this.hasActiveSubscription = subscription.status === 'ACTIVE';
+        console.log('Subscription status:', subscription.status); // Debug
+      },
+      error: (err) => {
+        console.error('Subscription error:', err);
+        this.hasActiveSubscription = false; // Allow proceeding without subscription
+        this.snackBar.open('Aucun abonnement actif détecté. Vous pouvez réserver sans abonnement, mais envisagez d\'en souscrire un pour des avantages.', 'S\'abonner', {
+          duration: 7000
+        }).onAction().subscribe(() => this.router.navigate(['/app/user/dashboard/abonnements']));
+      }
+    });
+
+    this.reservationForm.patchValue({
+      date: new Date(),
+      heureDebut: '10:00',
+      heureFin: '12:00',
+      vehicle: '123TU1234',
+      vehicleType: 'CAR',
+      email: 'user@example.com',
+      phone: '12345678',
+      paymentMethod: 'CREDIT_CARD'
+    });
+
+    this.checkPlaceAvailability();
+  }
+
+  getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    console.log('Token retrieved:', token ? 'Present' : 'Missing'); // Debug
+    return new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : '',
+      'Content-Type': 'application/json'
     });
   }
 
-  ngOnInit() {
-    this.checkUserSubscription();
+  checkPlaceAvailability(): void {
+    const date = formatDate(this.reservationForm.get('date')?.value || new Date(), 'yyyy-MM-dd', 'en');
+    const startTime = this.reservationForm.get('heureDebut')?.value || '10:00';
+    const endTime = this.reservationForm.get('heureFin')?.value || '12:00';
+    const query = `date=${date}&startTime=${startTime}&endTime=${endTime}`;
+
+    this.http.get<any[]>(`http://localhost:8082/parking/api/parking-spots/available?${query}`, {
+      headers: this.getAuthHeaders()
+    }).subscribe({
+      next: (response) => {
+        console.log('Availability response:', response);
+        this.availablePlaces = response.map(place => ({
+          id: place.id,
+          name: place.name,
+          type: place.type.toLowerCase(),
+          price: place.price,
+          available: place.available,
+          reserved: !place.available,
+          selected: false,
+          features: place.type === 'PREMIUM' ? ['Proche entrée', 'Sécurisé'] : []
+        }));
+      },
+      error: (err) => {
+        console.error('Availability error:', err);
+        const message = err.status === 401 ? 'Session expirée. Veuillez vous reconnecter.' : 'Impossible de vérifier la disponibilité des places.';
+        this.snackBar.open(message, 'Fermer', { duration: 5000 });
+        if (err.status === 401) {
+          this.storageService.logout();
+          this.router.navigate(['/auth']);
+        }
+      }
+    });
   }
 
-  // Méthodes abonnement
-  checkUserSubscription() {
-    // Simulation - remplacer par appel API réel
-    this.hasSubscription = true;
-    if (this.hasSubscription) {
-      this.subscriptionDetails = {
-        type: 'Premium',
-        validUntil: '2024-12-31',
-        remainingPlaces: 10,
-        monthlyLimit: 20
-      };
-    }
-  }
-
-  isPlaceIncludedInSubscription(place: any): boolean {
-    return this.hasSubscription && this.subscriptionIncludedPlaces.includes(place.name);
-  }
-
-  isPlaceEligibleForDiscount(place: any): boolean {
-    return this.hasSubscription && this.allowedSubscriptionPlaces.includes(place.name);
-  }
-
-  getPlaceTooltip(place: any): string {
-    if (place.reserved) {
-      return 'Cette place est déjà réservée';
-    }
-
-    let tooltip = `Place ${place.name} (${this.getPlaceTypeLabel(place.type)})\n`;
-    tooltip += `Tarif: ${place.price} TND/h`;
-
-    if (this.isPlaceIncludedInSubscription(place)) {
-      tooltip += '\n\n🟢 Incluse dans votre abonnement';
-    } else if (this.isPlaceEligibleForDiscount(place)) {
-      tooltip += `\n\n🔵 Éligible à ${this.subscriptionDiscount*100}% de réduction`;
-    }
-
-    if (place.features.length > 0) {
-      tooltip += `\n\nAvantages: ${place.features.join(', ')}`;
-    }
-
-    return tooltip;
-  }
-
-  // Méthodes de calcul
-  calculateMontant(): void {
-    if (!this.selectedPlace || !this.reservationForm.get('heureDebut')?.value || !this.reservationForm.get('heureFin')?.value) {
-      this.calculatedMontant = 0;
-      return;
-    }
-
-    if (this.isPlaceIncludedInSubscription(this.selectedPlace)) {
-      this.calculatedMontant = 0;
-      return;
-    }
-
-    const start = new Date(`2000-01-01T${this.reservationForm.get('heureDebut')?.value}`);
-    const end = new Date(`2000-01-01T${this.reservationForm.get('heureFin')?.value}`);
-    const diffHours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-
-    let basePrice = this.selectedPlace.price * diffHours;
-    let finalPrice = basePrice;
-
-    if (diffHours > 5) {
-      finalPrice *= 0.9;
-    }
-
-    if (this.isPlaceEligibleForDiscount(this.selectedPlace)) {
-      finalPrice *= (1 - this.subscriptionDiscount);
-    }
-
-    this.calculatedMontant = Math.round(finalPrice * 100) / 100;
-  }
-
-  getToday(): string {
-    return new Date().toISOString().split('T')[0];
-  }
-
-  calculateDuration(): string {
-    if (!this.reservationForm.get('heureDebut')?.value || !this.reservationForm.get('heureFin')?.value) {
-      return '0h';
-    }
-
-    const start = new Date(`2000-01-01T${this.reservationForm.get('heureDebut')?.value}`);
-    const end = new Date(`2000-01-01T${this.reservationForm.get('heureFin')?.value}`);
-    const diffHours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-    const hours = Math.floor(diffHours);
-    const minutes = Math.round((diffHours - hours) * 60);
-    
-    return `${hours}h${minutes > 0 ? `${minutes}m` : ''}`;
-  }
-
-  // Méthodes utilitaires
-  generateRandomId(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
-  getPlaceTypeLabel(type: string): string {
-    switch(type) {
-      case 'standard': return 'Standard';
-      case 'premium': return 'Premium';
-      default: return 'Inconnu';
-    }
-  }
-
-  // Méthodes d'interface
   selectPlace(place: any): void {
-    if (place.reserved) {
-      this.snackBar.open('Cette place est déjà réservée', 'Fermer', { duration: 3000 });
-      return;
-    }
+    if (place.reserved) return;
     this.availablePlaces.forEach(p => p.selected = false);
     place.selected = true;
-    this.placeSelected = true;
     this.selectedPlace = place;
+    this.placeSelected = true;
     this.calculateMontant();
   }
 
   nextStep(): void {
-    if (this.currentStep < this.totalSteps) {
-      this.currentStep++;
-      window.scrollTo(0, 0);
+    console.log('Next step triggered, current step:', this.currentStep); // Debug
+    if (this.currentStep === 1 && !this.placeSelected) {
+      this.snackBar.open('Veuillez sélectionner une place.', 'Fermer', { duration: 5000 });
+      return;
+    }
+    if (this.currentStep === 2 && this.reservationForm.invalid) {
+      this.reservationForm.markAllAsTouched();
+      this.snackBar.open('Veuillez compléter tous les champs obligatoires.', 'Fermer', { duration: 5000 });
+      this.debugForm(); // Debug invalid form
+      return;
+    }
+    this.currentStep++;
+    if (this.currentStep === 2) {
+      this.calculateMontant();
     }
   }
 
   prevStep(): void {
     if (this.currentStep > 1) {
       this.currentStep--;
-      window.scrollTo(0, 0);
-    }
-  }
-
-  submitReservation(): void {
-    if (this.reservationForm.valid && this.placeSelected) {
-      this.isLoading = true;
-      
-      setTimeout(() => {
-        const reservationData = {
-          ...this.reservationForm.value,
-          place: this.selectedPlace,
-          total: this.calculatedMontant,
-          reservationNumber: 'RES-' + this.generateRandomId(),
-          usedSubscription: this.hasSubscription && 
-                          (this.isPlaceIncludedInSubscription(this.selectedPlace) || 
-                           this.isPlaceEligibleForDiscount(this.selectedPlace))
-        };
-        
-        console.log('Réservation confirmée :', reservationData);
-        this.isLoading = false;
-        this.reservationSuccess = true;
-        
-        if (this.isPlaceIncludedInSubscription(this.selectedPlace)) {
-          this.snackBar.open('Place réservée avec votre abonnement!', 'Fermer', { duration: 5000 });
-        } else {
-          this.snackBar.open('Réservation confirmée!', 'Fermer', { duration: 5000 });
-        }
-      }, 1500);
     }
   }
 
   reset(): void {
-    this.reservationForm.reset({
-      vehicleType: 'Voiture',
-      paymentMethod: 'Carte bancaire'
-    });
-    this.availablePlaces.forEach(p => p.selected = false);
-    this.placeSelected = false;
     this.currentStep = 1;
     this.selectedPlace = null;
-    this.calculatedMontant = 0;
+    this.placeSelected = false;
     this.reservationSuccess = false;
+    this.paymentInitiated = false;
+    this.paymentUrl = null;
+    this.availablePlaces.forEach(p => p.selected = false);
+    this.reservationForm.reset({
+      date: new Date(),
+      heureDebut: '10:00',
+      heureFin: '12:00',
+      vehicle: '123TU1234',
+      vehicleType: 'CAR',
+      email: 'user@example.com',
+      phone: '12345678',
+      paymentMethod: 'CREDIT_CARD',
+      specialRequest: ''
+    });
+  }
+
+  getPlaceTooltip(place: any): string {
+    if (place.reserved) return 'Place réservée';
+    return `${place.name} (${place.type === 'standard' ? 'Standard' : 'Premium'}, ${place.price} TND/h)`;
+  }
+
+  getPlaceTypeLabel(type: string): string {
+    return type === 'standard' ? 'Standard' : 'Premium';
+  }
+
+  calculateDuration(): string {
+    const start = this.reservationForm.get('heureDebut')?.value;
+    const end = this.reservationForm.get('heureFin')?.value;
+    if (!start || !end) return '0h';
+    const [startHour, startMin] = start.split(':').map(Number);
+    const [endHour, endMin] = end.split(':').map(Number);
+    const duration = (endHour * 60 + endMin - (startHour * 60 + startMin)) / 60;
+    return `${duration}h`;
+  }
+
+  calculateMontant(): void {
+    if (!this.selectedPlace) {
+      this.calculatedMontant = 0;
+      return;
+    }
+    const duration = parseFloat(this.calculateDuration());
+    this.calculatedMontant = this.selectedPlace.price * duration;
+  }
+
+  debugForm(): void {
+    console.log('Form Values:', this.reservationForm.value);
+    console.log('Form Valid:', this.reservationForm.valid);
+    console.log('Form Errors:', this.reservationForm.errors);
+    Object.keys(this.reservationForm.controls).forEach(key => {
+      const control = this.reservationForm.get(key);
+      console.log(`${key} Errors:`, control?.errors);
+    });
+  }
+
+  initiatePayment(): void {
+    this.paymentInitiated = true;
+    this.snackBar.open('Préparation du paiement...', 'Fermer', { duration: 3000 });
+  }
+
+  submitReservation(): void {
+    if (!this.paymentInitiated) return;
+    this.isLoading = true;
+
+    const formDate = formatDate(this.reservationForm.get('date')?.value, 'yyyy-MM-dd', 'en');
+    const startTime = this.reservationForm.get('heureDebut')?.value;
+    const endTime = this.reservationForm.get('heureFin')?.value;
+
+    const reservationData = {
+      userId: this.storageService.getUserId() || 1,
+      parkingPlaceId: this.selectedPlace.id,
+      matricule: this.reservationForm.get('vehicle')?.value,
+      startTime: `${formDate}T${startTime}:00`,
+      endTime: `${formDate}T${endTime}:00`,
+      vehicleType: this.reservationForm.get('vehicleType')?.value,
+      email: this.reservationForm.get('email')?.value,
+      phone: this.reservationForm.get('phone')?.value,
+      paymentMethod: this.reservationForm.get('paymentMethod')?.value,
+      specialRequest: this.reservationForm.get('specialRequest')?.value || '',
+      amount: this.calculatedMontant
+    };
+
+    this.http.post<ReservationResponse>('http://localhost:8082/parking/api/createReservation', reservationData, {
+      headers: this.getAuthHeaders()
+    }).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.paymentUrl = response.redirect_url;
+        this.reservationSuccess = true;
+        this.snackBar.open('Réservation confirmée avec succès!', 'Fermer', { duration: 5000 });
+        if (this.paymentUrl) {
+          window.open(this.paymentUrl, '_blank');
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Reservation error:', err);
+        const message = err.status === 401 ? 'Session expirée. Veuillez vous reconnecter.' : 'Erreur lors de la confirmation de la réservation.';
+        this.snackBar.open(message, 'Fermer', { duration: 5000 });
+        if (err.status === 401) {
+          this.storageService.logout();
+          this.router.navigate(['/auth']);
+        }
+      }
+    });
+  }
+
+  generateRandomId(): string {
+    return Math.random().toString(36).substr(2, 9).toUpperCase();
+  }
+
+  getToday(): Date {
+    return new Date();
   }
 }

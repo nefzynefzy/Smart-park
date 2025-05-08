@@ -1,29 +1,20 @@
-<header class="fixed w-full bg-white bg-opacity-95 shadow-sm z-50">
+<nav class="bg-dark text-white shadow-lg sticky top-0 z-50">
   <div class="container mx-auto px-6 py-4">
     <div class="flex items-center justify-between">
-      <a routerLink="/app/user/dashboard" class="text-2xl font-['Pacifico'] text-primary">Logo</a>
-      
-      <nav class="hidden md:flex space-x-10">
-        <a routerLink="/app/user/user-dashboard" routerLinkActive="active">Accueil</a>
-        <a routerLink="/app/user/dashboard/profile" routerLinkActive="active">Profil</a>
-        <a routerLink="/app/user/dashboard/reservations" routerLinkActive="active">Réservations</a>
-        <a routerLink="/app/user/dashboard/abonnements" routerLinkActive="active">Abonnements</a>
+      <a routerLink="/app/user/dashboard" class="text-2xl font-['Pacifico'] text-secondary flex items-center">
+        <i class="ri-parking-box-fill text-secondary mr-2"></i>
+        Parki
+      </a>
+      <nav class="hidden md:flex space-x-8">
+        <a routerLink="/app/user/user-dashboard" routerLinkActive="active" class="text-white hover:text-gold-300 transition-colors font-medium">Accueil</a>
+        <a routerLink="/app/user/dashboard/profile" routerLinkActive="active" class="text-white hover:text-gold-300 transition-colors font-medium">Profil</a>
+        <a routerLink="/app/user/dashboard/reservations" routerLinkActive="active" class="text-white hover:text-gold-300 transition-colors font-medium">Réservations</a>
+        <a routerLink="/app/user/dashboard/abonnements" routerLinkActive="active" class="text-white hover:text-gold-300 transition-colors font-medium">Abonnements</a>
       </nav>
-
       <div class="flex items-center space-x-4">
-        <button 
-          *ngIf="!authService.isAuthenticated()"
-          routerLink="/auth"
-          class="nav-button">
-          Connexion
-        </button>
-        <button 
-          *ngIf="authService.isAuthenticated()"
-          (click)="authService.logout()"
-          class="nav-button">
-          Déconnexion
-        </button>
+        <a routerLink="/auth" class="bg-primary text-white px-6 py-2 rounded-button font-medium hover:bg-purple-800 transition-colors gold-glow">Connexion</a>
+        <a routerLink="/register" class="bg-gold-500 text-dark px-6 py-2 rounded-button font-medium hover:bg-gold-600 transition-colors gold-glow">S'inscrire</a>
       </div>
     </div>
   </div>
-</header>
+</nav>

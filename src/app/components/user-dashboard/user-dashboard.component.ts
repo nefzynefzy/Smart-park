@@ -3,6 +3,7 @@ import { UserService } from '../../services/user.service';
 import { ReservationService } from '../../services/Reservations/reservation.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { Reservation } from '../../models/reservation.model';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -11,9 +12,9 @@ import { RouterOutlet, RouterLink } from '@angular/router';
   styleUrls: ['./user-dashboard.component.css'],
   imports: [ReactiveFormsModule, RouterOutlet, RouterLink]
 })
-export class UserDashboardComponent implements OnInit { // Nom corrigé
+export class UserDashboardComponent implements OnInit {
   profileForm!: FormGroup;
-  reservations: any[] = [];
+  reservations: Reservation[] = [];
   userId = 1;
 
   constructor(
@@ -23,47 +24,68 @@ export class UserDashboardComponent implements OnInit { // Nom corrigé
   ) {}
 
   ngOnInit() {
-    // Formulaire de modification du profil
-    this.profileForm = this.fb.group({
-      nom: [''],
-      prenom: [''],
-      email: [''],
-      numPhone: [''],
-      password: ['', [Validators.minLength(6)]],  // Validation de longueur pour le mot de passe
-      confirmPassword: ['', [Validators.minLength(6)]]
-    });
-
-    // Charger les informations du profil et l'historique des réservations
+    this.initializeForm();
     this.loadUserProfile();
     this.loadUserReservations();
   }
 
-  loadUserProfile() {
-    this.userService.getUserProfile().subscribe((data) => {
+  initializeForm() {
+    this.profileForm = this.fb.group({
+      nom: [''],
+      prenom: [''],
+      email: ['', [Validators.email]],
+      numPhone: [''],
+      password: ['', [Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.minLength(6)]]
+    });
+  }
 
-      this.profileForm.patchValue(data);
+  loadUserProfile() {
+    this.userService.getUserProfile().subscribe({
+      next: (data) => {
+        this.profileForm.patchValue(data);
+      },
+      error: (error) => {
+        console.error('Error loading profile:', error);
+      }
     });
   }
 
   loadUserReservations() {
-    const observable = this.reservationService.createReservations(this.reservations);
+    this.reservationService.getUserReservations(this.userId).subscribe({
+      next: (reservations: Reservation[]) => {
+        this.reservations = reservations;
+      },
+      error: (error) => {
+        console.error('Error loading reservations:', error);
+      }
+    });
+  }
 
-if (observable) {
-  observable.subscribe(response => {
-    console.log("Réservation réussie", response);
-  }, error => {
-    console.error("Erreur lors de la réservation", error);
-  });
-} else {
-  console.error("L'appel à createReservation() n'a pas retourné d'Observable.");
-}
-
+  createNewReservation(reservationData: Reservation) {
+    this.reservationService.createReservation(reservationData).subscribe({
+      next: (response) => {
+        console.log('Reservation created:', response);
+        this.loadUserReservations(); // Refresh the list
+      },
+      error: (error) => {
+        console.error('Error creating reservation:', error);
+      }
+    });
   }
 
   updateProfile() {
-    this.userService.updateUserProfile(this.profileForm.value).subscribe(() => {
-
-      alert('Profil mis à jour avec succès !');
-    });
+    if (this.profileForm.valid) {
+      this.userService.updateUserProfile(this.profileForm.value).subscribe({
+        next: () => {
+          alert('Profile updated successfully!');
+        },
+        error: (error) => {
+          console.error('Error updating profile:', error);
+        }
+      });
+    } else {
+      console.error('Form is invalid');
+    }
   }
 }

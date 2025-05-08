@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth.guard/auth.guard.component';
+import { AuthGuard } from './core/auth.guard/auth.guard.component';
+
 
 export const routes: Routes = [
   { 
@@ -14,24 +15,12 @@ export const routes: Routes = [
     children: [
       {
         path: 'user/dashboard',
-        data: { role: 'USER' },
+        data: { role: 'ROLE_USER' },
         children: [
-          { 
-            path: '',
-            loadComponent: () => import('./components/user-dashboard/user-dashboard.component').then(m => m.UserDashboardComponent)
-          },
-          { 
-            path: 'profile',
-            loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent)
-          },
-          { 
-            path: 'reservations',
-            loadComponent: () => import('./components/reservations/reservations.component').then(m => m.ReservationsComponent)
-          },
-          { 
-            path: 'abonnements',
-            loadComponent: () => import('./components/abonnement/abonnement.component').then(m => m.AbonnementComponent)
-          },
+          { path: '', loadComponent: () => import('./components/user-dashboard/user-dashboard.component').then(m => m.UserDashboardComponent) },
+          { path: 'profile', loadComponent: () => import('./components/profile/profile.component').then(m => m.ProfileComponent) },
+          { path: 'reservations', loadComponent: () => import('./components/reservations/reservations.component').then(m => m. ReservationComponent) },
+          { path: 'abonnements', loadComponent: () => import('./components/subscription/subscription.component').then(m => m.SubscriptionComponent) },
           { path: '**', redirectTo: '' }
         ]
       },

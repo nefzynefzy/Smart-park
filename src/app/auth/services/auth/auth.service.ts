@@ -13,13 +13,12 @@ interface AuthResponse {
   email: string;
   phone: string;
   roles: string[];
-  
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiUrl = 'http://localhost:8082/parking/api/auth';
-
+  private tokenKey = 'token'; // Consistent key for token storage
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -32,7 +31,7 @@ export class AuthService {
         next: (response) => {
           console.log('Réponse reçue:', response);
           if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('token', response.token);
+            localStorage.setItem(this.tokenKey, response.token); // Use tokenKey for consistency
             localStorage.setItem('user', JSON.stringify({
               id: response.id,
               role: response.roles.includes('ROLE_ADMIN') ? 'ADMIN' : 'USER'
@@ -51,7 +50,7 @@ export class AuthService {
 
   private handleLoginSuccess(response: AuthResponse): void {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('token', response.token);
+      localStorage.setItem(this.tokenKey, response.token); // Use tokenKey
       localStorage.setItem('user', JSON.stringify({
         id: response.id,
         firstName: response.firstName,
@@ -81,6 +80,7 @@ export class AuthService {
         }
       });
   }
+
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.clear();
@@ -90,7 +90,7 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return isPlatformBrowser(this.platformId)
-      ? !!localStorage.getItem('token') 
+      ? !!localStorage.getItem(this.tokenKey) // Use tokenKey
       : false;
   }
 
@@ -103,7 +103,12 @@ export class AuthService {
     const userData = localStorage.getItem('user') || '{}';
     return JSON.parse(userData);
   }
+
   register(userData: any): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/signup`, userData);
+  }
+
+  getToken(): string | null {
+    return isPlatformBrowser(this.platformId) ? localStorage.getItem(this.tokenKey) : null; // Use tokenKey
   }
 }

@@ -32,6 +32,7 @@
                 "input": "node_modules/mapbox-gl/dist/mapbox-gl.css",
                 "inject": false
               },
+              "src/custom-theme.scss",
               "src/styles.css",
               "src/style.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",

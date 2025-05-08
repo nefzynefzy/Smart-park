@@ -10,6 +10,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 // Enregistre la locale pour ng-zorro
 registerLocaleData(en);
@@ -23,6 +24,6 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(FormsModule),
     provideAnimations(),
     provideHttpClient(),
-    importProvidersFrom(MatNativeDateModule),
+    importProvidersFrom(MatNativeDateModule), provideAnimationsAsync(), provideAnimationsAsync(),
   ]
 }).catch((err) => console.error(err));

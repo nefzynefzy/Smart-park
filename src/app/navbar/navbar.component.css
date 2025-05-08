@@ -1,0 +1,58 @@
+:host {
+  display: block;
+}
+
+.bg-dark {
+  background-color: #1E0D2B;
+}
+
+.text-secondary {
+  color: #D4AF37;
+}
+
+.gold-300 {
+  color: #F0DB9A;
+}
+
+.gold-500 {
+  color: #D4AF37;
+  background-color: #D4AF37;
+}
+
+.gold-600 {
+  color: #B8972E;
+  background-color: #B8972E;
+}
+
+.rounded-button {
+  border-radius: 8px;
+}
+
+.gold-glow {
+  transition: all 0.3s ease;
+}
+
+.gold-glow:hover {
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
+}
+
+.active {
+  color: #D4AF37;
+  font-weight: bold;
+}
+
+nav a {
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #F0DB9A;
+}
+
+.bg-primary {
+  background-color: #6A1B9A;
+}
+
+.hover\:bg-purple-800:hover {
+  background-color: #4c1370;
+}

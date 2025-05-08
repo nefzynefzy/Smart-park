@@ -13,7 +13,8 @@
   position: relative;
   z-index: 10;
   min-height: 100vh;
-  box-shadow: 2px 0 6px rgba(0,21,41,.35);
+  box-shadow: 2px 0 6px rgba(30,13,43,0.35);
+  background-color: #1E0D2B;
 }
 
 .header-trigger {
@@ -21,11 +22,14 @@
   padding: 20px 24px;
   font-size: 20px;
   cursor: pointer;
-  transition: all .3s,padding 0s;
+  transition: all .3s, padding 0s;
+  color: #D4AF37 !important;
 }
 
-.trigger:hover {
-  color: #1890ff;
+.header-trigger:hover {
+  color: #6A1B9A !important;
+  box-shadow: 0 0 15px rgba(212,175,55,0.7);
+  transition: all 0.3s ease;
 }
 
 .sidebar-logo {
@@ -34,8 +38,9 @@
   padding-left: 24px;
   overflow: hidden;
   line-height: 64px;
-  background: #001529;
+  background: #1E0D2B;
   transition: all .3s;
+  font-family: 'Pacifico', cursive;
 }
 
 .sidebar-logo img {
@@ -48,25 +53,75 @@
 .sidebar-logo h1 {
   display: inline-block;
   margin: 0 0 0 20px;
-  color: #fff;
+  color: #D4AF37;
   font-weight: 600;
   font-size: 14px;
-  font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
+  font-family: 'Pacifico', cursive;
   vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #D4AF37;
+  animation: typing 3.5s steps(20, end), blink-caret 0.75s step-end infinite;
 }
 
 nz-header {
   padding: 0;
   width: 100%;
   z-index: 2;
+  background: #1E0D2B !important;
 }
 
 .app-header {
   position: relative;
   height: 64px;
-  padding: 0;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  padding: 0 24px;
+  background: #1E0D2B;
+  box-shadow: 0 1px 4px rgba(106,27,154,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-header a {
+  color: #D4AF37 !important;
+  margin-left: 24px;
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+}
+
+.app-header a:hover {
+  color: #6A1B9A !important;
+}
+
+.app-header .actions {
+  display: flex;
+  gap: 10px;
+}
+
+.app-header .actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+
+.app-header .actions .connexion {
+  background-color: #6A1B9A !important;
+  color: white !important;
+}
+
+.app-header .actions .connexion:hover {
+  background-color: #4c1370 !important;
+}
+
+.app-header .actions .sinscrire {
+  background-color: #D4AF37 !important;
+  color: #1E0D2B !important;
+}
+
+.app-header .actions .sinscrire:hover {
+  background-color: #B8972E !important;
 }
 
 nz-content {
@@ -77,4 +132,51 @@ nz-content {
   padding: 24px;
   background: #fff;
   height: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  color: #1E0D2B;
+}
+
+/* Override Ng-Zorro/Ant Design default blue styles */
+:where(.ant-btn-primary) {
+  background-color: #6A1B9A !important;
+  border-color: #6A1B9A !important;
+}
+
+:where(.ant-btn-primary:hover) {
+  background-color: #4c1370 !important;
+  border-color: #4c1370 !important;
+}
+
+:where(.ant-btn) {
+  color: #D4AF37 !important;
+}
+
+:where(.ant-btn:hover) {
+  color: #6A1B9A !important;
+}
+
+:where(.ant-menu) {
+  background: #1E0D2B !important;
+}
+
+:where(.ant-menu-item a) {
+  color: #D4AF37 !important;
+}
+
+:where(.ant-menu-item a:hover) {
+  color: #6A1B9A !important;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #D4AF37; }
 }

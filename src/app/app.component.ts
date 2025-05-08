@@ -8,7 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavbarComponent],
+  imports: [CommonModule, RouterOutlet, NavbarComponent,],
   template: `
     <app-navbar *ngIf="showNavbar"></app-navbar>
     <router-outlet></router-outlet>

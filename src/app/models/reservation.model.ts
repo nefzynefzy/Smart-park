@@ -1,10 +1,17 @@
 export interface Reservation {
-  id?: number;
   userId: number;
-  placeId: number;
-  date: string;         // Format: 'YYYY-MM-DD'
-  heureDebut: string;   // Format: 'HH:mm'
-  heureFin: string;     // Format: 'HH:mm'
-  montant: number;
-  status?: 'pending' | 'confirmed' | 'canceled'; // Ajout d'un statut
+  parkingPlaceId: number;
+  matricule: string;
+  startTime: string;
+  endTime: string;
+  vehicleType: string;
+  email: string;
+  phone: string;
+  paymentMethod: string;
+  specialRequest: string;
+}
+
+export interface ReservationResponse {
+  id: number;
+  redirect_url: string;
 }
