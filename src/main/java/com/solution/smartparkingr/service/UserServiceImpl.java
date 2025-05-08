@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
                 .filter(r -> r.getId().equals(reservationId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Reservation not found: " + reservationId));
-        reservation.setStatus(ReservationStatus.CANCELLED);
+        reservation.setStatus(Reservation.ReservationStatus.CANCELLED);
         ParkingSpot spot = reservation.getParkingSpot();
         if (spot != null && !spot.isAvailable()) {
             parkingSpotService.releaseSpot(spot.getId());

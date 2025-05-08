@@ -18,4 +18,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     Optional<Subscription> findBySessionId(String sessionId);
 
     List<Subscription> findByEndDateBeforeAndStatus(LocalDate date, SubscriptionStatus status);
+    List<Subscription> findBySubscriptionType(String subscriptionType);
 }

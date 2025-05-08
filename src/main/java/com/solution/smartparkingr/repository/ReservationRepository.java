@@ -1,7 +1,7 @@
 package com.solution.smartparkingr.repository;
 
 import com.solution.smartparkingr.model.Reservation;
-import com.solution.smartparkingr.model.ReservationStatus;
+import com.solution.smartparkingr.model.Reservation.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +21,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("parkingSpotId") Long parkingSpotId,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime);
+
+    List<Reservation> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
+    List<Reservation> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
+
+    List<Reservation> findByStatusNotIn(List<ReservationStatus> statuses);
 }

@@ -74,7 +74,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
         // Handle expired reservations
         LocalDateTime now = LocalDateTime.now();
         List<Reservation> expiredReservations = reservationRepository.findByEndTimeBeforeAndStatus(
-                now, ReservationStatus.CONFIRMED);
+                now, Reservation.ReservationStatus.CONFIRMED);
         for (Reservation reservation : expiredReservations) {
             ParkingSpot spot = reservation.getParkingSpot();
             if (spot != null && !spot.isAvailable()) {
@@ -83,7 +83,7 @@ public class ParkingSpotServiceImpl implements ParkingSpotService {
                 parkingSpotRepository.save(spot);
                 logger.debug("Released spot ID: {} for expired reservation", spot.getId());
             }
-            reservation.setStatus(ReservationStatus.EXPIRED);
+            reservation.setStatus(Reservation.ReservationStatus.EXPIRED);
             reservationRepository.save(reservation);
         }
 

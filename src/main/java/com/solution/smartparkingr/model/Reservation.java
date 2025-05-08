@@ -63,4 +63,12 @@ public class Reservation {
         this.totalCost = totalCost;
         this.createdAt = createdAt;
     }
+
+    public enum ReservationStatus {
+        CONFIRMED,
+        CANCELLED,
+        COMPLETED,
+        EXPIRED,
+        PENDING,
+    }
 }

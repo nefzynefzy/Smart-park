@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-
     @Query("SELECT u FROM User u WHERE u.email = :email")
     Optional<User> findByEmailForProfile(@Param("email") String email);
 
@@ -21,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByPhone(String phone);
+
+    long countByActiveTrue();
 }

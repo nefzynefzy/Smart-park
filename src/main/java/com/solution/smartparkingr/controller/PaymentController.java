@@ -49,10 +49,10 @@ public class PaymentController {
 
             if ("SUCCESS".equalsIgnoreCase(status)) {
                 payment.setPaymentStatus("COMPLETED");
-                reservation.setStatus(ReservationStatus.CONFIRMED);
+                reservation.setStatus(Reservation.ReservationStatus.CONFIRMED);
             } else {
                 payment.setPaymentStatus("FAILED");
-                reservation.setStatus(ReservationStatus.CANCELLED);
+                reservation.setStatus(Reservation.ReservationStatus.CANCELLED);
 
                 if (reservation.getParkingSpot() != null) {
                     reservation.getParkingSpot().setAvailable(true);

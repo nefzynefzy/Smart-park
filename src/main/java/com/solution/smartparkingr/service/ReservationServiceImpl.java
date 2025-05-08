@@ -52,14 +52,14 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Reservation> findActiveReservations() {
-        return reservationRepository.findByStatus(ReservationStatus.CONFIRMED);
+        return reservationRepository.findByStatus(Reservation.ReservationStatus.CONFIRMED);
     }
 
     @Override
     public void cancelReservation(Long reservationId) {
         Optional<Reservation> reservation = reservationRepository.findById(reservationId);
         reservation.ifPresent(r -> {
-            r.setStatus(ReservationStatus.CANCELLED);
+            r.setStatus(Reservation.ReservationStatus.CANCELLED);
             reservationRepository.save(r);
         });
     }

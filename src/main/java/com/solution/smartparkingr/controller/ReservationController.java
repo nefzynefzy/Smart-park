@@ -130,7 +130,7 @@ public class ReservationController {
         reservation.setParkingSpot(parkingSpot);
         reservation.setStartTime(reservationRequest.getStartTime());
         reservation.setEndTime(reservationRequest.getEndTime());
-        reservation.setStatus(ReservationStatus.PENDING);
+        reservation.setStatus(Reservation.ReservationStatus.PENDING);
         reservation.setTotalCost(amount);
         reservation.setCreatedAt(LocalDateTime.now());
         reservation = reservationService.save(reservation);

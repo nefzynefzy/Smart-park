@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ParkingSpotRepository extends JpaRepository<ParkingSpot, Long> {
     Optional<ParkingSpot> findFirstByAvailableTrue();
     boolean existsByName(String name);
+    long countByAvailableFalse();
 }
