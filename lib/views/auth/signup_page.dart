@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'login_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:smart_parking/views/auth/login_page.dart';
+import '../../core/constants.dart';
+
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -27,7 +29,7 @@ class _SignupPageState extends State<SignupPage> {
 
     if (firstName.isEmpty || lastName.isEmpty || email.isEmpty || phone.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        const SnackBar(content: Text('Veuillez remplir tous les champs')),
       );
       return;
     }
@@ -37,7 +39,7 @@ class _SignupPageState extends State<SignupPage> {
     });
 
     try {
-      const String baseUrl = 'http://10.0.2.2:8082/parking'; // your Spring Boot backend URL
+      const String baseUrl = 'http://10.0.2.2:8082/parking';
       final url = Uri.parse('$baseUrl/api/auth/signup');
 
       final response = await http.post(
@@ -53,11 +55,9 @@ class _SignupPageState extends State<SignupPage> {
       );
 
       if (response.statusCode == 201) {
-        // Success signup
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account created successfully. Please login.')),
+          const SnackBar(content: Text('Compte créé avec succès. Veuillez vous connecter.')),
         );
-        // Navigate to Login page after success
         Future.delayed(const Duration(seconds: 2), () {
           Navigator.pushReplacement(
             context,
@@ -65,14 +65,13 @@ class _SignupPageState extends State<SignupPage> {
           );
         });
       } else {
-        // Error signup
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Signup failed: ${response.body}')),
+          SnackBar(content: Text('Échec de l\'inscription: ${response.body}')),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text('Erreur: $e')),
       );
     } finally {
       setState(() {
@@ -84,33 +83,34 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text(
-                  "Create Account",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                Text(
+                  "Créer un compte",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontSize: 32,
+                    color: AppColors.primaryColor,
+                  ),
                 ),
                 const SizedBox(height: 30),
                 TextField(
                   controller: _firstNameController,
                   decoration: const InputDecoration(
-                    labelText: "First Name",
+                    labelText: "Prénom",
                     prefixIcon: Icon(Icons.person_outline),
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
                 TextField(
                   controller: _lastNameController,
                   decoration: const InputDecoration(
-                    labelText: "Last Name",
+                    labelText: "Nom",
                     prefixIcon: Icon(Icons.person_outline),
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -119,16 +119,14 @@ class _SignupPageState extends State<SignupPage> {
                   decoration: const InputDecoration(
                     labelText: "Email",
                     prefixIcon: Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
                 TextField(
                   controller: _phoneController,
                   decoration: const InputDecoration(
-                    labelText: "Phone Number",
+                    labelText: "Numéro de téléphone",
                     prefixIcon: Icon(Icons.phone_outlined),
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -136,9 +134,8 @@ class _SignupPageState extends State<SignupPage> {
                   controller: _passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
-                    labelText: "Password",
+                    labelText: "Mot de passe",
                     prefixIcon: Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 30),
@@ -147,15 +144,14 @@ class _SignupPageState extends State<SignupPage> {
                     : ElevatedButton(
                   onPressed: _signup,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orangeAccent,
-                    padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                    minimumSize: const Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                   ),
                   child: const Text(
-                    "Sign Up",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    "S'inscrire",
+                    style: TextStyle(fontSize: 18),
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -166,7 +162,10 @@ class _SignupPageState extends State<SignupPage> {
                       MaterialPageRoute(builder: (context) => const LoginPage()),
                     );
                   },
-                  child: const Text("Already have an account? Login"),
+                  child: Text(
+                    "Déjà un compte ? Se connecter",
+                    style: TextStyle(color: AppColors.primaryColor),
+                  ),
                 ),
               ],
             ),

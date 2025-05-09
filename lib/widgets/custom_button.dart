@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_parking/core/constants.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
@@ -12,7 +13,7 @@ class CustomButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.icon,
-    this.color = Colors.blue,
+    this.color = AppColors.primaryColor,
     this.isFullWidth = true,
   });
 
@@ -22,15 +23,16 @@ class CustomButton extends StatelessWidget {
       width: isFullWidth ? double.infinity : null,
       child: ElevatedButton.icon(
         onPressed: onPressed,
-        icon: icon != null ? Icon(icon) : const SizedBox.shrink(),
-        label: Text(label),
+        icon: icon != null ? Icon(icon, color: AppColors.whiteColor) : const SizedBox.shrink(),
+        label: Text(
+          label,
+          style: const TextStyle(color: AppColors.whiteColor),
+        ),
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           backgroundColor: color,
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          foregroundColor: AppColors.whiteColor,
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );

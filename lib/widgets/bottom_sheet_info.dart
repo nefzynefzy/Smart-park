@@ -1,67 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:smart_parking/core/constants.dart';
-import 'package:smart_parking/widgets/primary_button.dart';
-
+import 'package:smart_parking/views/reservation/reservation_page.dart';
+import 'package:smart_parking/views/scan/scan_vehicle_page.dart';
 
 class BottomSheetInfo extends StatelessWidget {
-  const BottomSheetInfo({super.key});
+  final String spotId;
+  final double distance;
+  final double costPerHour;
+
+  const BottomSheetInfo({
+    super.key,
+    required this.spotId,
+    required this.distance,
+    required this.costPerHour,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
       padding: const EdgeInsets.all(16),
       height: 220,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, -3)),
+          BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 6, offset: const Offset(0, -3)),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Spot ID: A12",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Text(
+            "Spot ID: $spotId",
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 18),
           ),
           const SizedBox(height: 6),
-          const Text("Distance: 200m"),
-          const Text("Cost: 1.50 DT/hr"),
+          Text(
+            "Distance: ${distance.toStringAsFixed(0)}m",
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          Text(
+            "Coût: ${costPerHour.toStringAsFixed(2)} DT/hr",
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
-                child: PrimaryButton(
-                  label: "Réserver",
-                  icon: Icons.bookmark_add,
+                child: ElevatedButton.icon(
                   onPressed: () {
-                    // Implement reservation
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ReservationPage()),
+                    );
                   },
+                  icon: const Icon(Icons.bookmark_add, color: AppColors.textColor),
+                  label: const Text("Réserver"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondaryColor,
+                    foregroundColor: AppColors.textColor,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    // Implement scan
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ScanVehiclePage()),
+                    );
                   },
-                  icon: const Icon(AppIcons.scan, color: Color(0xFFFFA726)),
+                  icon: const Icon(AppIcons.scan, color: AppColors.primaryColor),
                   label: const Text("Scanner"),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFFFFA726),
-                    side: const BorderSide(color: Color(0xFFFFA726)),
+                    foregroundColor: AppColors.primaryColor,
+                    side: const BorderSide(color: AppColors.primaryColor),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

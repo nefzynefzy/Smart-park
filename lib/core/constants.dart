@@ -1,20 +1,29 @@
-// lib/core/constants.dart
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const primaryColor = Color(0xFF0D47A1); // Deep Navy Blue
-  static const secondaryColor = Color(0xFFFFA726); // Orange
-  static const backgroundColor = Color(0xFFFDFCFB); // Creamy White
-  static const accentColor = Color(0xFF64FFDA); // Light Turquoise
-  static const accentLightColor = Color(0xFFFFF59D); // Pale Yellow
-  static const textColor = Color(0xFF212121); // Dark Gray for titles
+  // Primary Palette
+  static const primaryColor = Color(0xFF6A1B9A); // Primary 500
+  static const primaryLightColor = Color(0xFFAB77C2); // Primary 300
+  static const primaryDarkColor = Color(0xFF3A0F5A); // Primary 900
+
+  // Accent Palette
+  static const secondaryColor = Color(0xFFD4AF37); // Accent 500
+  static const accentLightColor = Color(0xFFF9F3D6); // Accent 50
+  static const accentDarkColor = Color(0xFF806F1F); // Accent 900
+
+  // Background and Text Colors
+  static const backgroundColor = Color(0xFFF5F5F5); // Light Gray for background
+  static const darkBackgroundColor = Color(0xFF1E0D2B); // Dark background from frontend
+  static const textColor = Color(0xFF1E0D2B); // Dark color for titles
   static const subtitleColor = Color(0xFF757575); // Light Gray for subtitles
+
+  // Status Colors
   static const errorColor = Color(0xFFE57373); // Soft Red
   static const successColor = Color(0xFF81C784); // Light Green
 
-  static const greenColor = Color(0xFF8BC34A); // Green for Accueil
-  static const whiteColor = Color(0xFFFFFFFF); // White for Scanner, Aide
-  static const orangeColor = Color(0xFFFF7043); // Orange for Pôle
+  // Additional Colors
+  static const whiteColor = Color(0xFFFFFFFF);
+  static const grayColor = Color(0xFFEEEEEE);
 }
 
 class AppIcons {

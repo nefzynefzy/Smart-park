@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:smart_parking/views/home/home_page.dart';
 import 'package:smart_parking/views/profile/profile_page.dart';
 import 'package:smart_parking/views/scan/scan_vehicle_page.dart';
-import 'package:smart_parking/views/reservation/reservation_details.dart'; // Update import
-import 'package:smart_parking/views/menu/menu_page.dart';
+import 'package:smart_parking/views/reservation/reservation_details.dart';
+import 'package:smart_parking/views/subscription/subscription_page.dart';
+import 'package:smart_parking/views/vehicle/add_vehicle_page.dart' hide SubscriptionPage;
+import 'core/layout/main_layout.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({Key? key}) : super(key: key);
@@ -15,33 +17,25 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
-  // Update this list to include the new page
-  final List<Widget> _pages = const [
-    HomePage(),
-    ReservationDetailsPage(), // This will be displayed when 'Réservations' is tapped
-    ScanVehiclePage(),
-    MenuPage(),
-    ProfilePage(),
+  final List<Widget> _pages = [
+    HomePage(),              // Index 0: Accueil
+    ReservationDetailsPage(), // Index 1: Réservation
+    ScanVehiclePage(),       // Index 2: Scan (QR code)
+    SubscriptionPage(),      // Index 3: Subscription
+    ProfilePage(),           // Index 4: Profile (via AppBar avatar)
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex], // This is where the selected page is rendered
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index), // When an item is tapped, the page is changed
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.teal,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-          BottomNavigationBarItem(icon: Icon(Icons.confirmation_number), label: 'Réservations'),
-          BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner), label: 'Scanner'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
-      ),
+    return MainLayout(
+      userName: "User",
+      isDarkMode: Theme.of(context).brightness == Brightness.dark,
+      toggleDarkMode: () {
+        // Toggle theme mode logic here if needed
+      },
+      currentIndex: _selectedIndex,
+      onNavTap: (index) => setState(() => _selectedIndex = index),
+      child: _pages[_selectedIndex],
     );
   }
 }

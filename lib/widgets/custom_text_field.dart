@@ -1,8 +1,5 @@
-
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_parking/core/constants.dart';
 
 class CustomTextField extends StatelessWidget {
   final String label;
@@ -31,10 +28,13 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.grey[100],
-        prefixIcon: Icon(icon, color: Color(0xFFFFA726)),
+        fillColor: AppColors.grayColor,
+        prefixIcon: Icon(icon, color: AppColors.primaryColor),
         labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }

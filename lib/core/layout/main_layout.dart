@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants.dart';
 
 class MainLayout extends StatelessWidget {
   final String userName;
@@ -7,9 +8,6 @@ class MainLayout extends StatelessWidget {
   final int currentIndex;
   final Function(int) onNavTap;
   final Widget child;
-
-  static const Color secondaryColor = Color(0xFFFFA726); // Orange
-  static const Color accentLightColor = Color(0xFFFFF59D); // Pale Yellow
 
   const MainLayout({
     super.key,
@@ -23,32 +21,40 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = isDarkMode ? const Color(0xFF121212) : Colors.white;
-
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
-        backgroundColor: backgroundColor,
+        backgroundColor: isDarkMode ? AppColors.darkBackgroundColor : AppColors.whiteColor,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Text(''),
+        title: Text(
+          'Parkiny',
+          style: TextStyle(
+            fontFamily: 'Pacifico',
+            color: isDarkMode ? AppColors.accentLightColor : AppColors.secondaryColor,
+            fontSize: 24,
+          ),
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.brightness_6, color: isDarkMode ? Colors.white : Colors.black),
+            icon: Icon(
+              isDarkMode ? Icons.brightness_7 : Icons.brightness_4,
+              color: isDarkMode ? AppColors.whiteColor : AppColors.textColor,
+            ),
             onPressed: toggleDarkMode,
           ),
           const SizedBox(width: 8),
           GestureDetector(
-            onTap: () => onNavTap(3),
+            onTap: () => onNavTap(4), // ProfilePage at index 4
             child: Padding(
               padding: const EdgeInsets.only(right: 12),
               child: CircleAvatar(
                 radius: 18,
-                backgroundColor: isDarkMode ? Colors.grey[800] : accentLightColor,
+                backgroundColor: isDarkMode ? AppColors.primaryDarkColor : AppColors.accentLightColor,
                 child: Text(
                   userName.isNotEmpty ? userName[0].toUpperCase() : 'U',
                   style: TextStyle(
-                    color: isDarkMode ? Colors.white : Colors.deepOrange,
+                    color: isDarkMode ? AppColors.whiteColor : AppColors.textColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -58,45 +64,30 @@ class MainLayout extends StatelessWidget {
         ],
       ),
       body: child,
-      bottomNavigationBar: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            height: 70,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        height: 70,
+        decoration: BoxDecoration(
+          color: isDarkMode ? AppColors.primaryDarkColor : AppColors.whiteColor,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(Icons.home_outlined, 'Accueil', 0),
-                _buildNavItem(Icons.event_note_outlined, 'Réservation', 1),
-                const SizedBox(width: 56), // Space for central button
-                _buildNavItem(Icons.payment_outlined, 'Paiement', 3),
-                _buildNavItem(Icons.menu, 'Menu', 4),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 30,
-            child: FloatingActionButton(
-              onPressed: () => onNavTap(2),
-              backgroundColor: secondaryColor,
-              elevation: 6,
-              child: const Icon(Icons.qr_code_2, size: 32),
-            ),
-          ),
-        ],
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.home_outlined, 'Accueil', 0),
+            _buildNavItem(Icons.event_note_outlined, 'Réservation', 1),
+            _buildNavItem(Icons.qr_code_2, 'Scan', 2), // Added QR code scanning item
+            _buildNavItem(Icons.subscriptions, 'Subscription', 3),
+          ],
+        ),
       ),
     );
   }
@@ -110,14 +101,18 @@ class MainLayout extends StatelessWidget {
           Icon(
             icon,
             size: 26,
-            color: currentIndex == index ? secondaryColor : Colors.grey,
+            color: currentIndex == index
+                ? AppColors.secondaryColor
+                : (isDarkMode ? AppColors.accentLightColor : AppColors.subtitleColor),
           ),
           const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(
               fontSize: 12,
-              color: currentIndex == index ? secondaryColor : Colors.grey,
+              color: currentIndex == index
+                  ? AppColors.secondaryColor
+                  : (isDarkMode ? AppColors.accentLightColor : AppColors.subtitleColor),
             ),
           ),
         ],
