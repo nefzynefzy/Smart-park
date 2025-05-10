@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../core/constants.dart';
 
@@ -20,7 +21,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   List<Map<String, dynamic>> plans = [];
   bool isLoading = true;
   String? errorMessage;
-  String? paymentMethod = 'carte'; // Default to 'carte'
+  String? paymentMethod = 'carte';
   String? cardName;
   String? cardNumber;
   String? expiryDate;
@@ -29,12 +30,31 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   bool isPaymentProcessing = false;
   String? sessionId;
   WebViewController? _webViewController;
+  String? token;
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   @override
   void initState() {
     super.initState();
-    fetchUserProfile();
-    fetchVehicles();
+    _loadTokenAndFetchProfile();
+  }
+
+  Future<void> _loadTokenAndFetchProfile() async {
+    token = await _storage.read(key: 'auth_token');
+
+    if (token == null) {
+      setState(() {
+        isLoading = false;
+        errorMessage = 'Token not found. Please log in again.';
+      });
+      return;
+    }
+
+    await fetchUserProfile().then((_) {
+      if (userId != null) {
+        fetchVehicles();
+      }
+    });
   }
 
   Future<void> fetchUserProfile() async {
@@ -48,7 +68,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         Uri.parse('http://10.0.2.2:8082/parking/api/user/profile'),
         headers: {
           'Accept': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiZWphb3VpbWFyaWVtMTdAZ21haWwuY29tIiwiaWF0IjoxNzQ2NzUwNjk2LCJleHAiOjE3NDY4MzcwOTZ9.FKMuBSC6thdZYIamMG7lLvRZhKvDZmomaCNMiPeuTRa-WGNsVIyXGEjbnlzsb2wAAX7K8o4E9_W7mkVOC6CTHg',
+          'Authorization': 'Bearer $token',
         },
       );
 
@@ -74,24 +94,37 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   }
 
   Future<void> fetchVehicles() async {
+    if (userId == null) {
+      print('Warning: userId is null, skipping vehicle fetch');
+      setState(() {
+        errorMessage = 'User ID not available. Please retry.';
+      });
+      return;
+    }
+
     try {
       final response = await http.get(
         Uri.parse('http://10.0.2.2:8082/parking/api/vehicles?userId=$userId'),
         headers: {
           'Accept': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiZWphb3VpbWFyaWVtMTdAZ21haWwuY29tIiwiaWF0IjoxNzQ2NzUwNjk2LCJexPAiOjE3NDY4MzcwOTZ9.FKMuBSC6thdZYIamMG7lLvRZhKvDZmomaCNMiPeuTRa-WGNsVIyXGEjbnlzsb2wAAX7K8o4E9_W7mkVOC6CTHg',
+          'Authorization': 'Bearer $token',
         },
       );
+      print('Fetch vehicles response status: ${response.statusCode}');
+      print('Fetch vehicles response body: ${response.body}');
+
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+        print('Parsed vehicles data: $data');
         setState(() {
           vehicles = data.map((vehicle) => {
             'id': vehicle['id'],
             'name': vehicle['name'],
           }).toList();
+          print('Updated vehicles list: $vehicles');
         });
       } else {
-        throw Exception('Failed to load vehicles: ${response.statusCode}');
+        throw Exception('Failed to load vehicles: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       print('Error fetching vehicles: $e');
@@ -112,7 +145,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         Uri.parse('http://10.0.2.2:8082/parking/api/subscription-plans'),
         headers: {
           'Accept': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiZWphb3VpbWFyaWVtMTdAZ21haWwuY29tIiwiaWF0IjoxNzQ2NzUwNjk2LCJexPAiOjE3NDY4MzcwOTZ9.FKMuBSC6thdZYIamMG7lLvRZhKvDZmomaCNMiPeuTRa-WGNsVIyXGEjbnlzsb2wAAX7K8o4E9_W7mkVOC6CTHg',
+          'Authorization': 'Bearer $token',
         },
       );
 
@@ -173,34 +206,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     }
   }
 
-  void nextStep() {
-    setState(() {
-      if (currentStep < 2) currentStep++;
-    });
-  }
-
-  void selectPlan(int planId) {
-    setState(() {
-      selectedPlan = planId;
-    });
-  }
-
-  void toggleBillingType() {
-    setState(() {
-      billingType = billingType == 'monthly' ? 'annual' : 'monthly';
-    });
-  }
-
-  void selectPaymentMethod(String method) {
-    setState(() {
-      paymentMethod = method;
-      cardName = null;
-      cardNumber = null;
-      expiryDate = null;
-      cvv = null;
-    });
-  }
-
   Future<void> initiatePayment() async {
     if (selectedPlan == null || paymentMethod == null || userId == null ||
         (paymentMethod == 'carte' && (cardName == null || cardNumber == null || expiryDate == null || cvv == null))) {
@@ -214,13 +219,16 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       isPaymentProcessing = true;
     });
 
+    print('Initiating payment with token: $token');
+    print('Payload: {userId: $userId, subscriptionType: ${plans.firstWhere((plan) => plan['id'] == selectedPlan)['name']}, billingCycle: $billingType}');
+
     try {
       final response = await http.post(
         Uri.parse('http://10.0.2.2:8082/parking/api/subscribe'),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiZWphb3VpbWFyaWVtMTdAZ21haWwuY29tIiwiaWF0IjoxNzQ6NzUwNjk2LCJexPAiOjE3NDY4MzcwOTZ9.FKMuBSC6thdZYIamMG7lLvRZhKvDZmomaCNMiPeuTRa-WGNsVIyXGEjbnlzsb2wAAX7K8o4E9_W7mkVOC6CTHg',
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
           'userId': userId,
@@ -234,8 +242,12 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final redirectUrl = data['redirect_url'] as String;
-        sessionId = data['session_id'] as String;
+        final redirectUrl = data['redirect_url'] as String?;
+        sessionId = data['session_id'] as String?;
+
+        if (redirectUrl == null || sessionId == null) {
+          throw Exception('Invalid response: Missing redirect_url or session_id');
+        }
 
         _webViewController = WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -290,7 +302,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         Uri.parse('http://10.0.2.2:8082/parking/api/subscriptions/active?userId=$userId'),
         headers: {
           'Accept': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiZWphb3VpbWFyaWVtMTdAZ21haWwuY29tIiwiaWF0IjoxNzQ6NzUwNjk2LCJexPAiOjE3NDY4MzcwOTZ9.FKMuBSC6thdZYIamMG7lLvRZhKvDZmomaCNMiPeuTRa-WGNsVIyXGEjbnlzsb2wAAX7K8o4E9_W7mkVOC6CTHg',
+          'Authorization': 'Bearer $token',
         },
       );
 
@@ -307,7 +319,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
           );
         }
       } else {
-        throw Exception('Failed to check payment status: ${response.statusCode}');
+        throw Exception('Failed to check payment status: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       print('Error checking payment status: $e');
@@ -319,6 +331,34 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         isPaymentProcessing = false;
       });
     }
+  }
+
+  void nextStep() {
+    setState(() {
+      if (currentStep < 2) currentStep++;
+    });
+  }
+
+  void selectPlan(int planId) {
+    setState(() {
+      selectedPlan = planId;
+    });
+  }
+
+  void toggleBillingType() {
+    setState(() {
+      billingType = billingType == 'monthly' ? 'annual' : 'monthly';
+    });
+  }
+
+  void selectPaymentMethod(String method) {
+    setState(() {
+      paymentMethod = method;
+      cardName = null;
+      cardNumber = null;
+      expiryDate = null;
+      cvv = null;
+    });
   }
 
   @override
@@ -343,7 +383,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: fetchUserProfile,
+                onPressed: _loadTokenAndFetchProfile,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6A1B9A),
                   foregroundColor: Colors.white,
@@ -740,7 +780,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
-                        'Veuillez ajouter un véhicule dans votre profil avant de continuer.',
+                        errorMessage ??
+                            'Veuillez ajouter un véhicule dans votre profil avant de continuer.',
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           color: const Color(0xFFE57373),

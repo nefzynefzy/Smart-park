@@ -27,14 +27,6 @@ class MainLayout extends StatelessWidget {
         backgroundColor: isDarkMode ? AppColors.darkBackgroundColor : AppColors.whiteColor,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: Text(
-          'Parkiny',
-          style: TextStyle(
-            fontFamily: 'Pacifico',
-            color: isDarkMode ? AppColors.accentLightColor : AppColors.secondaryColor,
-            fontSize: 24,
-          ),
-        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -51,12 +43,10 @@ class MainLayout extends StatelessWidget {
               child: CircleAvatar(
                 radius: 18,
                 backgroundColor: isDarkMode ? AppColors.primaryDarkColor : AppColors.accentLightColor,
-                child: Text(
-                  userName.isNotEmpty ? userName[0].toUpperCase() : 'U',
-                  style: TextStyle(
-                    color: isDarkMode ? AppColors.whiteColor : AppColors.textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Icon(
+                  Icons.person, // Profile icon
+                  color: isDarkMode ? AppColors.whiteColor : AppColors.textColor,
+                  size: 24, // Adjust size as needed
                 ),
               ),
             ),

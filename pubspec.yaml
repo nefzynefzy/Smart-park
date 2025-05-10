@@ -4,35 +4,41 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.5.4  # Updated from ^3.5.4 to support webview_flutter 4.11.0
+  sdk: ">=3.7.0 <4.0.0"  # Compatible with Dart 3.7.2
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  go_router: ^15.1.2  # Updated from 13.0.1
+  go_router: ^15.1.2
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.9
   provider: ^6.1.1
-  lottie: ^3.3.1  # Updated from 3.2.0
+  lottie: ^3.3.1
   shared_preferences: ^2.5.2
   http: ^1.3.0
   flutter_animate: ^4.3.0
-  flutter_secure_storage: ^9.2.4  # Updated from 8.0.0
-  flutter_map: ^8.1.1  # Updated from 6.1.0
+  flutter_secure_storage: ^9.2.4
+  flutter_map: ^8.1.1
   latlong2: ^0.9.1
   url_launcher: ^6.0.10
   flutter_localizations:
     sdk: flutter
-  intl: 0.19.0  # Updated from 0.19.0
+  intl: 0.19.0  # Downgraded to match flutter_localizations
   font_awesome_flutter: ^10.6.0
-  mobile_scanner: ^5.2.3  # Replaced qr_code_scanner 1.0.1
-  webview_flutter: ^4.10.0  # Updated from 4.2.2
+  mobile_scanner: ^5.2.3
+  webview_flutter: ^4.11.0
+  google_maps_flutter: ^2.5.0
+  camera: ^0.10.0+5
+  image_picker: ^1.0.4
+  permission_handler: ^11.3.1  # For handling permissions
+  connectivity_plus: ^6.0.5
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0  # Updated from 4.0.0
+  flutter_lints: ^5.0.0
   intl_translation: ^0.20.1
 
 flutter:

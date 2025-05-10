@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScanVehiclePage extends StatefulWidget {
   const ScanVehiclePage({Key? key}) : super(key: key);
@@ -9,29 +9,26 @@ class ScanVehiclePage extends StatefulWidget {
 }
 
 class _ScanVehiclePageState extends State<ScanVehiclePage> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
   String? qrText;
-  String reservationNumber = "RES-1746731969746"; // Example reservation number from screenshot
+  String reservationNumber = "RES-1746731969746"; // Example reservation number
 
   @override
   void dispose() {
-    controller?.dispose();
     super.dispose();
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+  void _onDetect(BarcodeCapture capture) {
+    final List<Barcode> barcodes = capture.barcodes;
+    if (barcodes.isNotEmpty) {
       setState(() {
-        qrText = scanData.code;
+        qrText = barcodes.first.rawValue;
         if (qrText == reservationNumber) {
           _showConfirmationDialog();
         } else {
           _showErrorDialog("QR code invalide. Veuillez réessayer.");
         }
       });
-    });
+    }
   }
 
   void _showConfirmationDialog() {
@@ -74,9 +71,8 @@ class _ScanVehiclePageState extends State<ScanVehiclePage> {
         children: <Widget>[
           Expanded(
             flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
+            child: MobileScanner(
+              onDetect: _onDetect,
             ),
           ),
           Expanded(
