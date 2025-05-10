@@ -1,11 +1,6 @@
 package com.solution.smartparkingr.service;
 
-import com.solution.smartparkingr.model.ParkingSpot;
-import com.solution.smartparkingr.model.Reservation;
-import com.solution.smartparkingr.model.ReservationStatus;
-import com.solution.smartparkingr.model.Subscription;
-import com.solution.smartparkingr.model.SubscriptionStatus;
-import com.solution.smartparkingr.model.Vehicle;
+import com.solution.smartparkingr.model.*;
 import com.solution.smartparkingr.repository.ParkingSpotRepository;
 import com.solution.smartparkingr.repository.ReservationRepository;
 import com.solution.smartparkingr.repository.SubscriptionRepository;

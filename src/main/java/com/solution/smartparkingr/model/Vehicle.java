@@ -1,12 +1,12 @@
 package com.solution.smartparkingr.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "vehicles")
+@Data
 public class Vehicle {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,84 +30,6 @@ public class Vehicle {
     private String matriculeImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    // Constructors
-    public Vehicle() {}
-
-    public Vehicle(String matricule, String vehicleType, String brand, String model, String color, String matriculeImageUrl) {
-        this.matricule = matricule;
-        this.vehicleType = vehicleType;
-        this.brand = brand;
-        this.model = model;
-        this.color = color;
-        this.matriculeImageUrl = matriculeImageUrl;
-    }
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMatricule() {
-        return matricule;
-    }
-
-    public void setMatricule(String matricule) {
-        this.matricule = matricule;
-    }
-
-    public String getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(String vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getMatriculeImageUrl() {
-        return matriculeImageUrl;
-    }
-
-    public void setMatriculeImageUrl(String matriculeImageUrl) {
-        this.matriculeImageUrl = matriculeImageUrl;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

@@ -3,7 +3,7 @@ package com.solution.smartparkingr.service;
 import com.solution.smartparkingr.load.request.UserProfileUpdateRequest;
 import com.solution.smartparkingr.model.ParkingSpot;
 import com.solution.smartparkingr.model.Reservation;
-import com.solution.smartparkingr.model.ReservationStatus;
+import com.solution.smartparkingr.model.ReservationStatus; // Added import
 import com.solution.smartparkingr.model.Subscription;
 import com.solution.smartparkingr.model.User;
 import com.solution.smartparkingr.model.Vehicle;
@@ -16,8 +16,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,6 +34,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private VerificationCodeStore verificationCodeStore;
 
     @Override
     public User findById(Long userId) {
@@ -152,18 +160,64 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(String currentPassword, String newPassword) {
+    public void changePassword(String currentPassword, String newPassword, String verificationCode) {
         logger.debug("Changing password for current user");
         User user = getCurrentUser();
 
+        // Verify current password
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             logger.error("Current password is incorrect for user: {}", user.getEmail());
             throw new RuntimeException("Current password is incorrect");
         }
 
+        // Verify the code
+        String storedCode = verificationCodeStore.getCode(user.getEmail());
+        if (storedCode == null || !storedCode.equals(verificationCode)) {
+            logger.error("Invalid verification code for user: {}", user.getEmail());
+            throw new RuntimeException("Invalid verification code");
+        }
+
+        // Update password
         user.setPassword(passwordEncoder.encode(newPassword));
         logger.debug("Password updated successfully for user: {}", user.getEmail());
         userRepository.save(user);
+
+        // Remove the verification code after successful use
+        verificationCodeStore.removeCode(user.getEmail());
+    }
+
+    @Override
+    public void requestPasswordReset(String method, String email, String phone) {
+        logger.debug("Requesting password reset for method: {}, email: {}, phone: {}", method, email, phone);
+
+        // Validate input based on method
+        User user = userRepository.findByEmailWithAllData(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+        if (!user.getPhone().equals(phone)) {
+            logger.error("Phone number does not match user: {}", email);
+            throw new RuntimeException("Phone number does not match user");
+        }
+
+        // Generate a 6-digit verification code
+        String verificationCode = String.format("%06d", new Random().nextInt(999999));
+
+        try {
+            if ("email".equalsIgnoreCase(method)) {
+                logger.debug("Sending password reset email to: {}", email);
+                emailService.sendPasswordResetEmail(email, verificationCode);
+                verificationCodeStore.storeCode(email, verificationCode);
+            } else if ("sms".equalsIgnoreCase(method)) {
+                logger.warn("SMS verification is not implemented yet for user: {}", email);
+                throw new UnsupportedOperationException("SMS verification is not implemented yet");
+            } else {
+                logger.error("Invalid method provided: {}", method);
+                throw new IllegalArgumentException("Invalid method: " + method);
+            }
+            logger.debug("Verification code stored and sent for user: {}", email);
+        } catch (IOException e) {
+            logger.error("Failed to send verification code for user: {} due to: {}", email, e.getMessage());
+            throw new RuntimeException("Failed to send verification code: " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -174,7 +228,7 @@ public class UserServiceImpl implements UserService {
                 .filter(r -> r.getId().equals(reservationId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Reservation not found: " + reservationId));
-        reservation.setStatus(ReservationStatus.CANCELLED);
+        reservation.setStatus(ReservationStatus.CANCELLED); // Corrected to use the enum
         ParkingSpot spot = reservation.getParkingSpot();
         if (spot != null && !spot.isAvailable()) {
             parkingSpotService.releaseSpot(spot.getId());

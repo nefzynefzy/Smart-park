@@ -39,6 +39,23 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
+    public List<VehicleResponse> getVehiclesByUser(Long userId) {
+        List<Vehicle> vehicles = vehicleRepository.findByUserId(userId);
+        return vehicles.stream()
+                .map(vehicle -> new VehicleResponse(
+                        vehicle.getId(),
+                        vehicle.getMatricule(),
+                        vehicle.getVehicleType(),
+                        vehicle.getBrand(),
+                        vehicle.getModel(),
+                        vehicle.getColor(),
+                        vehicle.getMatriculeImageUrl(),
+                        vehicle.getUser() != null ? vehicle.getUser().getId() : null // Add userId
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public VehicleResponse createVehicle(VehicleRequest vehicleRequest) {
         // Fetch the user
         User user = userRepository.findById(vehicleRequest.getUserId())

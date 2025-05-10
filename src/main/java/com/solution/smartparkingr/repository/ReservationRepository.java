@@ -21,4 +21,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("parkingSpotId") Long parkingSpotId,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime);
+
+    List<Reservation> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
+    List<Reservation> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
+
+    List<Reservation> findByStatusNotIn(List<ReservationStatus> statuses);
 }

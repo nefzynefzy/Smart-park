@@ -35,6 +35,9 @@ public class Payment {
     @Column
     private LocalDateTime paymentDate;
 
+    @Column
+    private String paymentReference; // Added field
+
     public Payment() {}
 
     public Payment(Double amount, PaymentMethod paymentMethod, String paymentStatus, String transactionId, LocalDateTime paymentDate) {
@@ -78,4 +81,7 @@ public class Payment {
 
     public LocalDateTime getPaymentDate() { return paymentDate; }
     public void setPaymentDate(LocalDateTime paymentDate) { this.paymentDate = paymentDate; }
+
+    public String getPaymentReference() { return paymentReference; } // Added getter
+    public void setPaymentReference(String paymentReference) { this.paymentReference = paymentReference; } // Added setter
 }

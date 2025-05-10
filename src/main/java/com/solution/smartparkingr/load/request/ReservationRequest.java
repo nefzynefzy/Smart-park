@@ -35,16 +35,12 @@ public class ReservationRequest {
     @NotBlank(message = "Vehicle type is required")
     private String vehicleType;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    private String email;
-
-    @NotBlank(message = "Phone is required")
-    @Pattern(regexp = "[0-9]{8}", message = "Phone must be 8 digits")
-    private String phone;
-
     @NotNull(message = "Payment method is required")
     private PaymentMethod paymentMethod;
 
     private String specialRequest;
+
+    @NotBlank(message = "Email is required")
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Invalid email format")
+    private String email;
 }

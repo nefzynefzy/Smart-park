@@ -12,6 +12,9 @@ public class ChangePasswordRequest {
     @Size(min = 8, max = 50, message = "New password must be between 8 and 50 characters")
     private String newPassword;
 
+    @NotBlank(message = "Verification code is required")
+    private String verificationCode;
+
     // Getters and Setters
     public String getCurrentPassword() {
         return currentPassword;
@@ -27,5 +30,13 @@ public class ChangePasswordRequest {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

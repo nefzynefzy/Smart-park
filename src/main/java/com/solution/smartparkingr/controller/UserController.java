@@ -1,6 +1,7 @@
 package com.solution.smartparkingr.controller;
 
 import com.solution.smartparkingr.load.request.ChangePasswordRequest;
+import com.solution.smartparkingr.load.request.PasswordResetRequest;
 import com.solution.smartparkingr.load.request.UserProfileUpdateRequest;
 import com.solution.smartparkingr.load.response.UserProfileResponse;
 import com.solution.smartparkingr.model.User;
@@ -113,9 +114,15 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/request-password-reset")
+    public ResponseEntity<String> requestPasswordReset(@Valid @RequestBody PasswordResetRequest request) {
+        userService.requestPasswordReset(request.getMethod(), request.getEmail(), request.getPhone());
+        return ResponseEntity.ok("Verification code sent successfully");
+    }
+
     @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest request) {
-        userService.changePassword(request.getCurrentPassword(), request.getNewPassword());
+        userService.changePassword(request.getCurrentPassword(), request.getNewPassword(), request.getVerificationCode());
         return ResponseEntity.ok("Password updated successfully");
     }
 

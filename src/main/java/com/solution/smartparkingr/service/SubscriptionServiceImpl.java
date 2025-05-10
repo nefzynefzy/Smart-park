@@ -1,20 +1,13 @@
 package com.solution.smartparkingr.service;
 
-import com.solution.smartparkingr.model.Payment;
-import com.solution.smartparkingr.model.PaymentMethod;
-import com.solution.smartparkingr.model.Subscription;
-import com.solution.smartparkingr.model.SubscriptionPlan;
-import com.solution.smartparkingr.model.SubscriptionStatus;
-import com.solution.smartparkingr.model.User;
-import com.solution.smartparkingr.repository.PaymentRepository;
-import com.solution.smartparkingr.repository.SubscriptionPlanRepository;
-import com.solution.smartparkingr.repository.SubscriptionRepository;
-import com.solution.smartparkingr.repository.UserRepository;
+import com.solution.smartparkingr.model.*;
+import com.solution.smartparkingr.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -32,6 +25,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    private final Map<String, String> paymentVerificationCodes = new HashMap<>();
+    private final Map<String, String> subscriptionConfirmationCodes = new HashMap<>();
+
     @Override
     public Subscription save(Subscription subscription) {
         return subscriptionRepository.save(subscription);
@@ -41,23 +37,20 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public String createSubscription(Long userId, String subscriptionType, String billingCycle) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé avec l'ID: " + userId));
-
         SubscriptionPlan plan = subscriptionPlanRepository.findByType(subscriptionType)
                 .orElseThrow(() -> new IllegalArgumentException("Plan d'abonnement non trouvé: " + subscriptionType));
 
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = "MONTHLY".equalsIgnoreCase(billingCycle) ? startDate.plusMonths(1) : startDate.plusYears(1);
-
-        double price = "MONTHLY".equalsIgnoreCase(billingCycle) ? plan.getMonthlyPrice() : plan.getMonthlyPrice() * 9.6; // 20% discount
+        double price = "MONTHLY".equalsIgnoreCase(billingCycle) ? plan.getMonthlyPrice() : plan.getMonthlyPrice() * 9.6;
 
         String sessionId = "SMT" + System.currentTimeMillis();
-
         Subscription subscription = new Subscription();
         subscription.setUser(user);
         subscription.setSubscriptionType(subscriptionType);
         subscription.setStartDate(startDate);
         subscription.setEndDate(endDate);
-        subscription.setStatus(SubscriptionStatus.PENDING); // Changed from "PENDING"
+        subscription.setStatus(SubscriptionStatus.PENDING);
         subscription.setPrice(price);
         subscription.setBillingCycle(billingCycle);
         subscription.setParkingDurationLimit(plan.getParkingDurationLimit());
@@ -71,24 +64,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscription.setAutoRenewal(false);
 
         subscriptionRepository.save(subscription);
-
-        // Create associated payment
-        Payment payment = new Payment();
-        payment.setAmount(price);
-        payment.setPaymentMethod(PaymentMethod.CARTE_BANCAIRE);
-        payment.setPaymentStatus("PENDING");
-        payment.setTransactionId(sessionId);
-        payment.setPaymentDate(LocalDateTime.now());
-        payment.setSubscription(subscription); // Link to subscription
-        payment.setReservation(null); // Explicitly set reservation to null
-        paymentRepository.save(payment);
-
-        return "https://mock-payment.smt.tn/pay?session=" + sessionId + "&return_url=http://localhost:8082/parking/api/subscription/callback";
+        return sessionId;
     }
 
     @Override
     public Optional<Subscription> getActiveSubscription(Long userId) {
-        return subscriptionRepository.findByUserIdAndStatus(userId, SubscriptionStatus.ACTIVE); // Changed from "ACTIVE"
+        return subscriptionRepository.findByUserIdAndStatus(userId, SubscriptionStatus.ACTIVE);
     }
 
     @Override
@@ -100,7 +81,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public void cancelSubscription(Long subscriptionId) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId)
                 .orElseThrow(() -> new IllegalArgumentException("Abonnement non trouvé"));
-        subscription.setStatus(SubscriptionStatus.CANCELLED); // Changed from "CANCELLED"
+        subscription.setStatus(SubscriptionStatus.CANCELLED);
         subscriptionRepository.save(subscription);
     }
 
@@ -110,7 +91,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 .orElseThrow(() -> new IllegalArgumentException("Abonnement non trouvé"));
         LocalDate newEndDate = subscription.getEndDate().plusMonths(1);
         subscription.setEndDate(newEndDate);
-        subscription.setStatus(SubscriptionStatus.ACTIVE); // Changed from "ACTIVE"
+        subscription.setStatus(SubscriptionStatus.ACTIVE);
         subscriptionRepository.save(subscription);
     }
 
@@ -123,14 +104,30 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         if ("SUCCESS".equalsIgnoreCase(status)) {
             subscription.setPaymentStatus("COMPLETED");
-            subscription.setStatus(SubscriptionStatus.ACTIVE); // Changed from "ACTIVE"
+            subscription.setStatus(SubscriptionStatus.ACTIVE);
             payment.setPaymentStatus("COMPLETED");
         } else {
             subscription.setPaymentStatus("FAILED");
-            subscription.setStatus(SubscriptionStatus.CANCELLED); // Changed from "CANCELLED"
+            subscription.setStatus(SubscriptionStatus.CANCELLED);
             payment.setPaymentStatus("FAILED");
         }
         subscriptionRepository.save(subscription);
         paymentRepository.save(payment);
+    }
+
+    public void storePaymentVerificationCode(String sessionId, String code) {
+        paymentVerificationCodes.put(sessionId, code);
+    }
+
+    public String getPaymentVerificationCode(String sessionId) {
+        return paymentVerificationCodes.get(sessionId);
+    }
+
+    public void storeSubscriptionConfirmationCode(String sessionId, String code) {
+        subscriptionConfirmationCodes.put(sessionId, code);
+    }
+
+    public String getSubscriptionConfirmationCode(String sessionId) {
+        return subscriptionConfirmationCodes.get(sessionId);
     }
 }

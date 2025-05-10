@@ -37,9 +37,11 @@ public class Reservation {
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
 
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReservationStatus status;
+
 
     @Column(name = "total_cost")
     private Double totalCost;
@@ -47,13 +49,16 @@ public class Reservation {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "email")
+    private String email;
+
     // Default constructor
     public Reservation() {}
 
     // Constructor for creating a reservation
     public Reservation(User user, Vehicle vehicle, ParkingSpot parkingSpot,
                        LocalDateTime startTime, LocalDateTime endTime, ReservationStatus status,
-                       Double totalCost, LocalDateTime createdAt) {
+                       Double totalCost, LocalDateTime createdAt, String email) {
         this.user = user;
         this.vehicle = vehicle;
         this.parkingSpot = parkingSpot;
@@ -62,5 +67,8 @@ public class Reservation {
         this.status = status;
         this.totalCost = totalCost;
         this.createdAt = createdAt;
+        this.email = email;
     }
+
+
 }

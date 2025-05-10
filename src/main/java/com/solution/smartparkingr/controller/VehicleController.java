@@ -19,12 +19,10 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
 
-    // Get all vehicles
     @GetMapping("/vehicles")
-    public List<VehicleResponse> getAllVehicles() {
-        return vehicleService.getAllVehicles();
+    public List<VehicleResponse> getVehiclesByUser(@RequestParam Long userId) {
+        return vehicleService.getVehiclesByUser(userId); // Update service method accordingly
     }
-
     // Add a new vehicle
     @PostMapping("/vehicle")
     public ResponseEntity<?> createVehicle(@Valid @RequestBody VehicleRequest vehicleRequest) {

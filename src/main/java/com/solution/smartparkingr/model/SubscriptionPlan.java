@@ -11,7 +11,7 @@ public class SubscriptionPlan {
     private Long id;
 
     @Column(name = "type")
-    private String type; // e.g., "Basic", "Standard", "Premium", "Elite"
+    private String type; // e.g., "Basique", "Premium", "Entreprise"
 
     @Column(name = "monthly_price")
     private Double monthlyPrice;
@@ -34,11 +34,14 @@ public class SubscriptionPlan {
     @Column(name = "remaining_places_per_month")
     private Integer remainingPlacesPerMonth;
 
+    @Column(name = "is_popular")
+    private Boolean isPopular;
+
     // Constructors, Getters, Setters
     public SubscriptionPlan() {}
 
     public SubscriptionPlan(String type, Double monthlyPrice, Integer parkingDurationLimit, Integer advanceReservationDays,
-                            Boolean hasPremiumSpots, Boolean hasValetService, String supportLevel, Integer remainingPlacesPerMonth) {
+                            Boolean hasPremiumSpots, Boolean hasValetService, String supportLevel, Integer remainingPlacesPerMonth, Boolean isPopular) {
         this.type = type;
         this.monthlyPrice = monthlyPrice;
         this.parkingDurationLimit = parkingDurationLimit;
@@ -47,6 +50,7 @@ public class SubscriptionPlan {
         this.hasValetService = hasValetService;
         this.supportLevel = supportLevel;
         this.remainingPlacesPerMonth = remainingPlacesPerMonth;
+        this.isPopular = isPopular;
     }
 
     // Getters and Setters
@@ -120,5 +124,13 @@ public class SubscriptionPlan {
 
     public void setRemainingPlacesPerMonth(Integer remainingPlacesPerMonth) {
         this.remainingPlacesPerMonth = remainingPlacesPerMonth;
+    }
+
+    public Boolean getIsPopular() {
+        return isPopular;
+    }
+
+    public void setIsPopular(Boolean isPopular) {
+        this.isPopular = isPopular;
     }
 }

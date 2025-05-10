@@ -41,15 +41,13 @@ public class PaymentController {
                 .orElseThrow(() -> new IllegalArgumentException("Paiement introuvable pour la session : " + session));
 
         if (payment.getReservation() != null) {
-            // Handle reservation payment
             Reservation reservation = payment.getReservation();
             if (reservation == null) {
                 return ResponseEntity.badRequest().body("Réservation associée introuvable.");
             }
 
             if ("SUCCESS".equalsIgnoreCase(status)) {
-                payment.setPaymentStatus("COMPLETED");
-                reservation.setStatus(ReservationStatus.CONFIRMED);
+                payment.setPaymentStatus("PENDING_CONFIRMED"); // Payment confirmed, awaiting reservation confirmation
             } else {
                 payment.setPaymentStatus("FAILED");
                 reservation.setStatus(ReservationStatus.CANCELLED);
@@ -57,11 +55,11 @@ public class PaymentController {
                 if (reservation.getParkingSpot() != null) {
                     reservation.getParkingSpot().setAvailable(true);
                     reservation.getParkingSpot().setVehicle(null);
+                    reservationRepository.save(reservation); // Save parking spot changes
                 }
             }
             reservationRepository.save(reservation);
         } else if (payment.getSubscription() != null) {
-            // Handle subscription payment
             Subscription subscription = payment.getSubscription();
             if ("SUCCESS".equalsIgnoreCase(status)) {
                 payment.setPaymentStatus("COMPLETED");

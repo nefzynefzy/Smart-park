@@ -1,5 +1,6 @@
 package com.solution.smartparkingr.model;
 
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.FetchMode;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 @Entity
 @Table(name = "users",
@@ -70,6 +72,9 @@ public class User {
     @Fetch(FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<Reservation> reservations;
+
+    @Embedded
+    private Coordinates coordinates;
 
     public User() {
     }
@@ -168,5 +173,13 @@ public class User {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 }

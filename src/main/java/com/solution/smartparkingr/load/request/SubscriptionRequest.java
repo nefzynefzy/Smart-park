@@ -1,41 +1,43 @@
 package com.solution.smartparkingr.load.request;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.solution.smartparkingr.model.PaymentMethod;
+import jakarta.validation.constraints.*;
+import lombok.Data;
 
+@Data
 public class SubscriptionRequest {
 
-    @NotNull
-    private Long userId;
+    @NotBlank(message = "User ID is required")
+    private String userId;
 
-    @NotBlank
+    @NotBlank(message = "Subscription type is required")
     private String subscriptionType;
 
-    @NotBlank
+    @NotBlank(message = "Billing cycle is required")
     private String billingCycle;
 
-    // Getters and Setters
-    public Long getUserId() {
-        return userId;
-    }
+    @NotNull(message = "Amount is required")
+    @Positive(message = "Amount must be positive")
+    private Double amount;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    @NotNull(message = "Payment method is required")
+    private PaymentMethod paymentMethod;
 
-    public String getSubscriptionType() {
-        return subscriptionType;
-    }
+    @NotBlank(message = "Payment reference is required")
+    private String paymentReference;
 
-    public void setSubscriptionType(String subscriptionType) {
-        this.subscriptionType = subscriptionType;
-    }
+    @NotBlank(message = "Card number is required")
+    private String cardNumber;
 
-    public String getBillingCycle() {
-        return billingCycle;
-    }
+    @NotBlank(message = "Expiry date is required")
+    private String expiryDate;
 
-    public void setBillingCycle(String billingCycle) {
-        this.billingCycle = billingCycle;
-    }
+    @NotBlank(message = "CVV is required")
+    private String cvv;
+
+    @NotBlank(message = "Card name is required")
+    private String cardName;
+
+    @NotBlank(message = "Email is required")
+    private String email;
 }
