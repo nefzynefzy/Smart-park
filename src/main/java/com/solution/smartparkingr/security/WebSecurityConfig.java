@@ -30,6 +30,7 @@ import java.util.List;
 public class WebSecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
+    
     private final AuthEntryPointJwt unauthorizedHandler;
 
     public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
@@ -76,6 +77,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/subscription-plans").permitAll()
                         .requestMatchers("/api/subscribe", "/api/subscription/**", "/api/subscriptions/active").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/parking/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/parking/api/admin/estimate-revenue").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
@@ -110,7 +113,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://10.0.2.2:8082", "http://localhost:4200")); // Add Flutter origin if needed
+        configuration.setAllowedOrigins(List.of("http://10.0.2.2:8082", "http://localhost:4200"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
