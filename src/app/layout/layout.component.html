@@ -1,0 +1,19 @@
+<div class="layout-container">
+    <mat-toolbar color="primary">
+      <span>Smart Park</span>
+      <div class="nav-links">
+        <a mat-button routerLink="/user-dashboard" *ngIf="!isAdmin()">Dashboard</a>
+        <a mat-button routerLink="/profile">Profil</a>
+        <a mat-button routerLink="/reservations">Réservations</a>
+        <a mat-button routerLink="/abonnement">Abonnement</a>
+        <a mat-button routerLink="/admin-dashboard" *ngIf="isAdmin()">Admin</a>
+        <button mat-button (click)="logout()">Déconnexion</button>
+      </div>
+    </mat-toolbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+    <footer>
+      <p>© 2025 Smart Park. Tous droits réservés.</p>
+    </footer>
+  </div>
